@@ -6,10 +6,13 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/01 17:53:35 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/01 18:01:30 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main()
+int	main(int argc, char **argv, char **envp)
+{
+	
+}
