@@ -10,11 +10,17 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
+#include <unistd.h>
 #define SUCCESS 0
 // flag - есть -n или нет
 
-void ft_putstr_fd()
+void ft_putstr_fd(char *str, int fd)
 {
+	while(*str)
+	{
+		write(fd, str, 1);
+		str++;
+	}
 
 }
 
@@ -27,22 +33,22 @@ int ft_echo(char *str, int flag, int fd)
 	return(SUCCESS);
 }
 
-int ft_cd(str *path)
-{
-
-}
-
-
-
-// int	main(int argc, char **argv, char **env)
+// int ft_cd(str *path)
 // {
-// 	char	*str;
 
-// 	str = readline("bash$ ");
-// 	ft_echo(str, 0);
-// 	ft_cd();
-// 	// printf("%s\n", str);
 // }
+
+
+
+int	main(int argc, char **argv, char **env)
+{
+	char	*str;
+
+	str = readline("bash$ ");
+	ft_echo(str, 0 , 1);
+	// ft_cd();
+	// printf("%s\n", str);
+}
 
 
 

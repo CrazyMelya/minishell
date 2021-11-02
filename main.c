@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/01 17:48:03 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/02 19:32:29 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
-{
+// int	main(int argc, char **argv, char **envp)
+// {
 	
-}
+// }
