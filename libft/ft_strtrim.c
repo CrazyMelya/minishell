@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/02 20:18:19 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/09 13:22:23 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/25 22:46:46 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_mini
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	t_list	*arg;
-	int		red;
-}				t_mini;
+	int		len;
+	char	*result;
 
-int ft_echo(t_mini *mini, int flag, int fd);
-
-#endif
+	if (!s1)
+		return (NULL);
+	while (ft_strchr(set, *s1) && *s1)
+		s1++;
+	len = ft_strlen(s1);
+	while (ft_strchr(set, s1[len - 1]) && len)
+		len--;
+	result = ft_substr(s1, 0, len);
+	return (result);
+}

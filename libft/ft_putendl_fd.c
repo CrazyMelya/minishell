@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/02 20:18:19 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/19 02:10:49 by cliza             #+#    #+#             */
+/*   Updated: 2021/04/25 16:09:03 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_mini
+void	ft_putendl_fd(char *s, int fd)
 {
-	t_list	*arg;
-	int		red;
-}				t_mini;
-
-int ft_echo(t_mini *mini, int flag, int fd);
-
-#endif
+	if (s)
+	{
+		ft_putstr_fd(s, fd);
+		ft_putchar_fd('\n', fd);
+	}
+}

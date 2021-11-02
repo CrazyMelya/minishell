@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/02 20:18:19 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/16 11:01:07 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/25 22:49:30 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_mini
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	t_list	*arg;
-	int		red;
-}				t_mini;
+	size_t	i;
 
-int ft_echo(t_mini *mini, int flag, int fd);
-
-#endif
+	if (!dst)
+		return ((size_t) NULL);
+	if (!size)
+		return (ft_strlen(src));
+	i = 0;
+	while (i < size - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return (ft_strlen(src));
+}

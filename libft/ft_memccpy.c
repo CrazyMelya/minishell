@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/02 20:18:19 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/06 21:29:04 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/25 22:48:30 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_mini
+void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 {
-	t_list	*arg;
-	int		red;
-}				t_mini;
+	char		*dest_temp;
+	const char	*src_temp;
 
-int ft_echo(t_mini *mini, int flag, int fd);
-
-#endif
+	dest_temp = (char *)dest;
+	src_temp = (const char *)src;
+	while (n--)
+	{
+		*dest_temp = *src_temp;
+		if (*dest_temp == (char)c)
+			return (++dest_temp);
+		dest_temp++;
+		src_temp++;
+	}
+	return (NULL);
+}
