@@ -1,0 +1,11 @@
+Makefile
+commands.c
+commands.o
+kak
+kek
+libft
+lol
+minishell
+minishell.c
+minishell.h
+minishell.o
