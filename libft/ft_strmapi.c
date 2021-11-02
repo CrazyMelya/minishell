@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/03 00:45:49 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/08 13:18:14 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/27 11:55:16 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_redir
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char			*filename;
-	int				type;
-	struct s_redir	*next;
-}				t_redir;
+	char	*result;
+	int		i;
 
-typedef	struct s_mini
-{
-	char	**argv;
-	t_redir	*redir;
-}				t_mini;
-
-int ft_echo(char **argv);
-
-#endif
+	if (!s || !f)
+		return (NULL);
+	result = (char *)malloc(ft_strlen(s) + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		result[i] = f(i, s[i]);
+		i++;
+	}
+	result[i] = 0;
+	return (result);
+}

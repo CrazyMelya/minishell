@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/03 00:45:49 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/19 02:10:49 by cliza             #+#    #+#             */
+/*   Updated: 2021/04/25 16:09:03 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_redir
+void	ft_putendl_fd(char *s, int fd)
 {
-	char			*filename;
-	int				type;
-	struct s_redir	*next;
-}				t_redir;
-
-typedef	struct s_mini
-{
-	char	**argv;
-	t_redir	*redir;
-}				t_mini;
-
-int ft_echo(char **argv);
-
-#endif
+	if (s)
+	{
+		ft_putstr_fd(s, fd);
+		ft_putchar_fd('\n', fd);
+	}
+}

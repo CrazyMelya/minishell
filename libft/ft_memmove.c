@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/03 00:45:49 by cliza            ###   ########.fr       */
+/*   Created: 2021/04/07 10:21:23 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/25 22:34:42 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include "libft/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <fcntl.h>
-
-typedef	struct s_redir
+void	*ft_memmove(void *dest, void *src, size_t n)
 {
-	char			*filename;
-	int				type;
-	struct s_redir	*next;
-}				t_redir;
+	char		*dest_temp;
+	const char	*src_temp;
 
-typedef	struct s_mini
-{
-	char	**argv;
-	t_redir	*redir;
-}				t_mini;
-
-int ft_echo(char **argv);
-
-#endif
+	if (!dest && !src)
+		return (NULL);
+	dest_temp = (char *)dest;
+	src_temp = (const char *)src;
+	if (dest < src)
+	{
+		while (n--)
+			*dest_temp++ = *src_temp++;
+	}
+	else
+	{
+		while (n)
+		{
+			dest_temp[n - 1] = src_temp[n - 1];
+			n--;
+		}
+	}
+	return (dest);
+}
