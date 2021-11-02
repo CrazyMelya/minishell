@@ -35,13 +35,13 @@ int ft_echo(char **argv)
 	flag = 0;
 	if (argc(argv) > 1)
 	{
-		while (argv[i] && !ft_strncmp(argv[i], "-n", 2))
+		while (argv[i] && !ft_strncmp(argv[i], "-n", 3))
 		{
 			flag = 1;
 			i++;
 		}
-		if (!ft_strncmp(argv[i], "-", 1))
-			i++;
+		//if (!ft_strncmp(argv[i], "-", 2))
+		//	i++;
 		while (argv[i])
 		{
 			ft_putstr_fd(argv[i], 1);
