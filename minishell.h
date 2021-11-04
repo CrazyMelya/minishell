@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/03 01:54:20 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/04 12:03:06 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,18 @@
 #include <readline/history.h>
 #include <fcntl.h>
 
-typedef	struct s_redir
-{
-	char			*filename;
-	int				type;
-	struct s_redir	*next;
-}				t_redir;
-
 typedef	struct s_mini
 {
-	char	**argv;
-	t_redir	*redir;
+	int				argc;
+	char			**argv;
+	char			*write_file;
+	int				write_type;
+	char			*read_file;
+	int				read_type;
+	struct s_mini	*next;
+	
 }				t_mini;
 
-int ft_echo(char **argv);
+int ft_echo(int argc, char **argv);
 
 #endif
