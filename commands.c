@@ -14,8 +14,8 @@
 // вывести bash отсортированный
 // если просто - то вывести список - отсортированный
 
-// ◦ unset with no options
-// ◦ env with no options or arguments
+// ◦ unset with no options -
+// ◦ env with no options or arguments - 
 // ◦ exit with no options
 
 #include <readline/readline.h>
@@ -108,6 +108,26 @@ t_env *find_on_head(t_env *env, char *head)
 }
 
 
+t_env *finde_pre_on_head(t_env *env, char *head)
+{
+
+	while (env->next != NULL)
+	{
+		// printf("-[[[[[[]]]]]] %s\n", env->key);
+		if (ft_strcmp(env->next->key, head) == 0)
+		{
+			// printf("-[[[[[[%s]]]]]] \n", env->key);
+			return(env);
+		}
+		// printf("+ %s\n", env->key);
+		env = env->next;
+		// printf("- %s\n", env->key);
+	}
+	printf("NO WAY %s\n", head);
+	return(NULL);
+}
+
+
 int do_oldpwd(t_env *env)
 {
 	t_env *my_str = find_on_head(env, "OLDPWD");
@@ -172,11 +192,14 @@ int	detect_len_of_stack(t_env *stack)
 	i = 0;
 	if (stack == NULL)
 		return (0);
-	while (stack-> next != NULL)
+		// printf("%d\n", len_of_the_stack);
+	// printf("hello world\n");
+	while (stack->next != NULL)
 	{
 		i++;
 		stack = stack-> next;
 	}
+	printf("hello world\n");
 	return (i + 1);
 }
 
@@ -221,11 +244,7 @@ char *find_the_min(t_env *envr,int from, int i)
 		}
 	}
 	// printf("-----%d--%s--\n" ,envr->flag, envr->key);
-	if (envr->flag)
-	{
-		return(the_word_of_min);
-	}
-	else
+	if (!(envr->flag))
 	{
 		
 		if (sum_of_lett(envr->key, i) <= from)
@@ -240,8 +259,22 @@ char *find_the_min(t_env *envr,int from, int i)
 		
 		if (the_word_of_min == NULL)
 		 	the_word_of_min = envr->key;
-		return(the_word_of_min);
+		
 	}
+	// sleep(2);
+	return(the_word_of_min);
+}
+
+
+void back_flags(t_env *env)
+{
+	while (env->next != NULL)
+	{
+		env->flag = 0;
+		env = env->next;
+		// printf("- %s\n", env->key);
+	}
+env->flag = 0;
 }
 
 void show_sorted_env(t_env *envr)
@@ -252,11 +285,9 @@ void show_sorted_env(t_env *envr)
 	int len_of_the_stack = detect_len_of_stack(envr);
 	int i = 0;
 	from = (int)envr->key[0];
+	printf("%d\n", len_of_the_stack);
 	while(len_of_the_stack)
 	{
-
-		
-		// first_lett = envr->key[i];
 		while((the_min_word =  find_the_min(envr,from, i)) == NULL)
 		{
 
@@ -264,6 +295,7 @@ void show_sorted_env(t_env *envr)
 			i++;
 			from = from + (int)envr->key[i];
 		}
+		// printf("%d\n", len_of_the_stack);
 		i++;
 		from = from + (int)envr->key[i];
 		// printf("||%d %s||\n", from, the_min_word);
@@ -273,6 +305,7 @@ void show_sorted_env(t_env *envr)
 		printf("%s %s\n", the_el->key, the_el->content);
 		len_of_the_stack--;
 	}
+	back_flags(envr);
 
 }
 
@@ -280,7 +313,12 @@ int ft_export(t_env *export, t_env **envr, int flag)
 {
 	//Функция для того чтобы экспортировть перменные в переменную окружения - чужую - нашу - ненастоящую!!
 	if (flag)
-		show_env(*envr);
+	{
+		printf("sdfghgfdesd+=======\n");
+		show_sorted_env(*envr);
+		return(0);
+	}
+	else{
 	t_env *first_el = *envr;
 	t_env export2;
 	export2.key = "lylyly";
@@ -296,7 +334,7 @@ int ft_export(t_env *export, t_env **envr, int flag)
 	printf("!!!!!]]]]\n\n\n");
 	// sort_env(envr);
 	
-	return(0);
+	return(0);}
 }
 
 
@@ -333,7 +371,13 @@ void print_pwd_and_old_pwd(t_env *envr)
 
 }
 
-
+void ft_unset(char *unset, t_env **envr)
+{
+	t_env *after = find_on_head(*envr, unset);//доделать!!!!!!
+	t_env *pre = finde_pre_on_head(*envr, unset);
+	printf("%s %s" , pre->key, after->key);
+	after->next = pre;
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -356,10 +400,16 @@ int	main(int argc, char **argv, char **env)
 	export.next = NULL;
 	export.flag = 0;
 	ft_export(&export,&envr,0);
+	
+	ft_export(&export,&envr,1);
+	printf("+================================================\n");
+	ft_unset("ONE",&envr);
+	ft_export(&export,&envr,1);
+
 	// ft_unset();
 //что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 
-	char *dir = getenv("PWD");
-	printf("getcwd:  (%s)\n", ft_pwd());
+	// char *dir = getenv("PWD");
+	// printf("getcwd:  (%s)\n", ft_pwd());
 	// print_pwd_and_old_pwd(envr);
 }
 
