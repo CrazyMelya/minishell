@@ -1,8 +1,19 @@
 //написание команд 
-// ◦ echo with option -n
+// ◦ echo with option -n - 
 // ◦ cd with only a relative or absolute path(- или вообще без аргументов????? . .. absolut_path relative_path)
-// ◦ pwd with no options
-// ◦ export with no options
+
+// если такого не существует 
+// если нет аргументов
+// если две точки
+
+// ◦ pwd with no options - 
+// ◦ export with no options 
+
+// нужно отсортирвать
+// добавить новый
+// вывести bash отсортированный
+// если просто - то вывести список - отсортированный
+
 // ◦ unset with no options
 // ◦ env with no options or arguments
 // ◦ exit with no options
@@ -24,7 +35,14 @@ struct s_env *next;
 
 }				t_env;
 
-
+char *ft_pwd()
+{
+	char *dir;
+	dir = malloc(1024);
+	getcwd(dir, 1024);
+	return dir;
+	//или просто распечатать?
+}
 
 void ft_putstr_fd(char *str, int fd)
 {
@@ -46,15 +64,65 @@ int ft_echo(char *str, int flag, int fd)
 }
 
 
-int do_oldpwd(char *path, t_env *env)
+
+void listprint(t_env *env)
 {
+	while (env->next != NULL)
+	{
+		printf("%s %s\n", env->key, env->content);
+		env = env->next;
+	}	
+	printf("%s %s\n", env->key, env->content);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i;
+
+	i = 0;
+	// printf("|%s %s|",s1, s2 );
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
+}
+
+
+t_env *find_on_head(t_env *env, char *head)
+{
+
+	while (env->next != NULL)
+	{
+		if (ft_strcmp(env->key, head) == 0)
+			return(env);
+		// printf("+ %s\n", env->key);
+		env = env->next;
+		// printf("- %s\n", env->key);
+	}
+	if (ft_strcmp(env->key, head) == 0)
+		return(env);
+		// printf("+ %s\n", env->key);
+	env = env->next;
+	printf("NO WAY %s\n", head);
+	return(NULL);
+}
+
+
+int do_oldpwd(t_env *env)
+{
+	t_env *my_str = find_on_head(env, "OLDPWD");
+
+	my_str->content = find_on_head(env, "PWD")->content;
+	//Заменяем старый путь
 // ret = chdir(env_path);
-return(0);
+	return(0);
 }
 
 
 int do_pwd(char *path, t_env *env)
 {
+	//Заменяем текущий путь
+	t_env *my_str = find_on_head(env, "PWD");
+	my_str->content = path;
 	return(0);
 }
 
@@ -67,12 +135,50 @@ int ft_cd(char *path, t_env *env)
 	// замена настоящего на предстоящий
 
 	// 1) просто путь
-	do_oldpwd(path, env);
-	do_pwd(path, env);
-
-
+	int r = chdir(path);
+	char *full_path = ft_pwd();
+	do_oldpwd(env);
+	
+	do_pwd(full_path, env);
 	return(SUCCESS);
 }
+
+
+
+void show_env(t_env *envr)
+{
+	listprint(envr);
+}
+
+void paste_env(t_env *export, t_env **envr)
+{
+	while ((*envr)->next != NULL)
+	{
+		// printf("%s %s\n", env->key, env->content);
+		*envr = (*envr)->next;
+	}	
+	*envr = (*envr)->next;
+	*envr  = export;
+}
+
+
+
+int ft_export(t_env *export, t_env **envr, int flag)
+{
+	//Функция для того чтобы экспортировть перменные в переменную окружения - чужую - нашу - ненастоящую!!
+	if (flag)
+		show_env(*envr);
+	t_env *first_el = *envr;
+	paste_env(export, envr);
+	printf("!!!!!]]]]\n\n\n");
+	*envr = first_el;
+	show_env(*envr);
+	printf("!!!!!]]]]\n\n\n");
+	// sort_env(envr);
+	
+	return(0);
+}
+
 
 t_env	*insert_into_stack()
 {
@@ -90,9 +196,22 @@ t_env	*insert_into_stack()
 	first_el_of_stack = stack;
 	stack1->key = "OLDPWD";
 	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
-	stack-> next = stack1;
+	stack1->next  = NULL;
+	stack->next = stack1;
+
 	return (first_el_of_stack);
 }
+
+
+
+void print_pwd_and_old_pwd(t_env *envr)
+{
+	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
+	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
+
+}
+
+
 
 int	main(int argc, char **argv, char **env)
 {
@@ -100,20 +219,29 @@ int	main(int argc, char **argv, char **env)
 
 	str = readline("bash$ ");
 	t_env *envr;
+	t_env export;
 	// ft_echo(str, 0 , 1);
 	envr = insert_into_stack();
-	int r = chdir("/Users/vbackyet/Desktop/moi_minishell/minishell/kuku");
-	printf("(%d)\n",r);
-	ft_cd(str, envr);
+	// listprint(envr);
+	// int r = chdir("/Users/vbackyet/Desktop/moi_minishell/minishell/kuku");
+	// printf("(%d)\n",r);
+	// print_pwd_and_old_pwd(envr);
+	// ft_cd(str, envr);
+	
+	// ft_pwd();
+	export.key = "ONE";
+	export.content = "TWO bla bla bla";
+	export.next = NULL;
+	ft_export(&export,&envr,0);
 
 //что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 
 	char *dir = getenv("PWD");
-	printf("%s\n", dir);
-	printf("%s\n", env[16]);
+	printf("getcwd:  (%s)\n", ft_pwd());
+	// print_pwd_and_old_pwd(envr);
 }
 
 
-
+// env | grep PATH
 
 
 
