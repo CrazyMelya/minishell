@@ -31,6 +31,7 @@ typedef struct s_env
 {
 char *key;
 char *content;
+int 	flag;
 struct s_env *next;
 
 }				t_env;
@@ -152,16 +153,128 @@ void show_env(t_env *envr)
 
 void paste_env(t_env *export, t_env **envr)
 {
+	t_env *first_el = *envr;
 	while ((*envr)->next != NULL)
 	{
-		// printf("%s %s\n", env->key, env->content);
 		*envr = (*envr)->next;
 	}	
-	*envr = (*envr)->next;
-	*envr  = export;
+
+	(*envr)->next= export;
+
+	// *envr  = export;
+	*envr = first_el;
+}
+
+int	detect_len_of_stack(t_env *stack)
+{
+	int	i;
+
+	i = 0;
+	if (stack == NULL)
+		return (0);
+	while (stack-> next != NULL)
+	{
+		i++;
+		stack = stack-> next;
+	}
+	return (i + 1);
 }
 
 
+int sum_of_lett(char *my_word, int to)
+{
+	int i = 0;
+	int sum = 0;
+	while((my_word[i] != '\0') && (i <= to))
+	{
+		sum+= (int)my_word[i];
+		i++;
+	}
+	return(sum);
+}
+
+
+
+char *find_the_min(t_env *envr,int from, int i)
+{
+	char *the_word_of_min = NULL;
+	int flag = 2;
+	while (envr->next != NULL)
+	{
+		// printf("-----%d--%s--\n" ,envr->flag, envr->key);
+		if (envr->flag)
+			envr = envr->next;
+		else{
+			if (sum_of_lett(envr->key, i) <= from)
+			{
+				the_word_of_min = envr->key;
+				from = sum_of_lett(envr->key, i);
+				flag--;
+			}
+			// printf("  &&&&&&%d %d %s %d %d&&&&&\n",sum_of_lett(envr->key, i), i, envr->key, from , flag);
+			// sleep(3);
+			if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
+			{
+				return(NULL);
+			}
+			envr = envr->next;
+		}
+	}
+	// printf("-----%d--%s--\n" ,envr->flag, envr->key);
+	if (envr->flag)
+	{
+		return(the_word_of_min);
+	}
+	else
+	{
+		
+		if (sum_of_lett(envr->key, i) <= from)
+		{
+			the_word_of_min = envr->key;
+			from = sum_of_lett(envr->key, i);
+			flag--;
+		}
+		if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
+			return(NULL);
+		///
+		
+		if (the_word_of_min == NULL)
+		 	the_word_of_min = envr->key;
+		return(the_word_of_min);
+	}
+}
+
+void show_sorted_env(t_env *envr)
+{
+	int first_lett;
+	char *the_min_word;
+	int from;
+	int len_of_the_stack = detect_len_of_stack(envr);
+	int i = 0;
+	from = (int)envr->key[0];
+	while(len_of_the_stack)
+	{
+
+		
+		// first_lett = envr->key[i];
+		while((the_min_word =  find_the_min(envr,from, i)) == NULL)
+		{
+
+			// printf("***********%s********\n", the_min_word);
+			i++;
+			from = from + (int)envr->key[i];
+		}
+		i++;
+		from = from + (int)envr->key[i];
+		// printf("||%d %s||\n", from, the_min_word);
+
+		t_env *the_el = find_on_head(envr, the_min_word);
+		(*the_el).flag = 1;
+		printf("%s %s\n", the_el->key, the_el->content);
+		len_of_the_stack--;
+	}
+
+}
 
 int ft_export(t_env *export, t_env **envr, int flag)
 {
@@ -169,10 +282,17 @@ int ft_export(t_env *export, t_env **envr, int flag)
 	if (flag)
 		show_env(*envr);
 	t_env *first_el = *envr;
+	t_env export2;
+	export2.key = "lylyly";
+	export2.content = "bububub";
+	export2.next = NULL;
+	export2.flag  = 0;
 	paste_env(export, envr);
+	paste_env(&export2, envr);
 	printf("!!!!!]]]]\n\n\n");
 	*envr = first_el;
-	show_env(*envr);
+	// show_env(*envr);
+	show_sorted_env(*envr);
 	printf("!!!!!]]]]\n\n\n");
 	// sort_env(envr);
 	
@@ -192,11 +312,13 @@ t_env	*insert_into_stack()
 	stack = (t_env *)malloc(sizeof(t_env));
 	stack1 = (t_env *)malloc(sizeof(t_env));
 	stack->key = "PWD";
+	stack->flag = 0;
 	stack-> content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
 	first_el_of_stack = stack;
 	stack1->key = "OLDPWD";
 	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
 	stack1->next  = NULL;
+	stack1->flag  = 0;
 	stack->next = stack1;
 
 	return (first_el_of_stack);
@@ -232,8 +354,9 @@ int	main(int argc, char **argv, char **env)
 	export.key = "ONE";
 	export.content = "TWO bla bla bla";
 	export.next = NULL;
+	export.flag = 0;
 	ft_export(&export,&envr,0);
-
+	// ft_unset();
 //что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 
 	char *dir = getenv("PWD");
 	printf("getcwd:  (%s)\n", ft_pwd());
