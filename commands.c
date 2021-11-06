@@ -320,13 +320,14 @@ int ft_export(t_env *export, t_env **envr, int flag)
 	}
 	else{
 	t_env *first_el = *envr;
-	t_env export2;
-	export2.key = "lylyly";
-	export2.content = "bububub";
-	export2.next = NULL;
-	export2.flag  = 0;
+	t_env *export2;
+	export2 = (t_env*)malloc(sizeof(t_env));
+	export2->key = "lylyly";
+	export2->content = "bububub";
+	export2->next = NULL;
+	export2->flag  = 0;
 	paste_env(export, envr);
-	paste_env(&export2, envr);
+	paste_env(export2, envr);
 	printf("!!!!!]]]]\n\n\n");
 	*envr = first_el;
 	// show_env(*envr);
@@ -373,11 +374,24 @@ void print_pwd_and_old_pwd(t_env *envr)
 
 void ft_unset(char *unset, t_env **envr)
 {
-	t_env *after = find_on_head(*envr, unset);//доделать!!!!!!
+	// printf("MY ENV!!!\n");
+	// show_env(*envr);
+	// printf("\nMY ENV!!!\n");
+	t_env *after = (find_on_head(*envr, unset))->next;//доделать!!!!!!
 	t_env *pre = finde_pre_on_head(*envr, unset);
-	printf("%s %s" , pre->key, after->key);
-	after->next = pre;
+	pre->next = after;
 }
+
+
+
+
+
+
+void ft_exit()
+{
+
+}
+
 
 int	main(int argc, char **argv, char **env)
 {
@@ -403,7 +417,7 @@ int	main(int argc, char **argv, char **env)
 	
 	ft_export(&export,&envr,1);
 	printf("+================================================\n");
-	ft_unset("ONE",&envr);
+	ft_unset("lylyly",&envr);
 	ft_export(&export,&envr,1);
 
 	// ft_unset();
