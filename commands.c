@@ -18,11 +18,16 @@
 // ◦ env with no options or arguments - 
 // ◦ exit with no options
 
-#include <readline/readline.h>
-#include <readline/history.h>
+// #include <readline/readline.h>
+// #include <readline/history.h>
+#include "readline/readline.h"
+#include "readline/history.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "minishell.h"
+
+
 
 #define SUCCESS 0
 // flag - есть -n или нет
@@ -158,6 +163,10 @@ int ft_cd(char *path, t_env *env)
 	// 1) просто путь
 	int r = chdir(path);
 	char *full_path = ft_pwd();
+	if (path == NULL)
+	{
+		
+	}
 	do_oldpwd(env);
 	
 	do_pwd(full_path, env);
