@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 20:22:00 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/08 20:33:02 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int	main(int argc, char **argv, char **envp)
 				temp = temp->next;
 			}
 			//if (!pid)
-			//	run_program(mini, envp);
+			//run_program(mini, envp);
 			wait(0);
 		}
 		free(line);
