@@ -7,7 +7,8 @@ CFLAGS	=	-Wall -Wextra -Werror
 CC		=	gcc
 
 SRCS	=	minishell.c\
-			commands.c
+			commands.c\
+			parsing/check_line.c
 
 OBJS 	= $(SRCS:%.c=%.o)
 

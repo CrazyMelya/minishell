@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 12:35:10 by marvin            #+#    #+#             */
-/*   Updated: 2021/06/20 21:15:54 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/04 21:30:45 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	unsigned int	i;
 	unsigned int	j;
 
-	if (!s1 || !s2)
-		return (NULL);
+	if (!s2)
+		return (ft_strdup(s1));
+	if (!s1)
+		return (ft_strdup(s2));
 	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!result)
 		return (NULL);
