@@ -8,7 +8,10 @@ CC		=	gcc
 
 SRCS	=	minishell.c\
 			commands.c\
-			parsing/check_line.c
+			parsing/check_line.c\
+			parsing/redirection.c\
+			parsing/parsing.c\
+			parsing/parse_utils.c
 
 OBJS 	= $(SRCS:%.c=%.o)
 

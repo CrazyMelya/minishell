@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:58:29 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 18:30:55 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/08 19:33:39 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,16 @@ int	check_redir(char *line)
 				line++;
 			while (*line == ' ')
 				line++;
-			if (ft_strchr(SPEC, *line) || !(*line))
+			if (ft_strchr(SPEC2, *line) || !(*line))
 			{
-				if (*ft_strchr(SPEC, *line) == '>' && *(line + 1) == '>')
+				if (*ft_strchr(SPEC2, *line) == '>' && *(line + 1) == '>')
 					printf("%s `>>'\n", SYNT_ERR);
-				else if (*ft_strchr(SPEC, *line) == '<' && *(line + 1) == '<')
+				else if (*ft_strchr(SPEC2, *line) == '<' && *(line + 1) == '<')
 					printf("%s `<<'\n", SYNT_ERR);
 				else if (!(*line))
 					printf("%s `newline'\n", SYNT_ERR);
 				else
-					printf("%s `%c'\n", SYNT_ERR, *ft_strchr(SPEC, *line));
+					printf("%s `%c'\n", SYNT_ERR, *ft_strchr(SPEC2, *line));
 				return (-1);
 			}			
 		}
