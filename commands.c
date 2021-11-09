@@ -60,12 +60,32 @@ void ft_putstr_fd(char *str, int fd)
 
 }
 
+//}
 
-int ft_echo(char *str, int flag, int fd)
+int ft_echo(int argc, char **argv)
 {
-	ft_putstr_fd(str, fd);
-	if (flag)
-		ft_putstr_fd("\n", fd);
+	int	i;
+	int	flag;
+
+	i = 1;
+	flag = 0;
+	if (argc > 1)
+	{
+		while (argv[i] && !ft_strncmp(argv[i], "-n", 3))
+		{
+			flag = 1;
+			i++;
+		}
+		while (argv[i])
+		{
+			ft_putstr_fd(argv[i], 1);
+			if (argv[i + 1])
+				ft_putchar_fd(' ', 1);
+			i++;
+		}
+	}
+	if (!flag)
+		ft_putchar_fd('\n', 1);
 	return(SUCCESS);
 }
 
@@ -379,7 +399,7 @@ void print_pwd_and_old_pwd(t_env *envr)
 	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
 	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
 
-}
+//}
 
 void ft_unset(char *unset, t_env **envr)
 {

@@ -8,6 +8,16 @@
 
 // #include <readline/readline.h>
 // #include <readline/history.h>
+
+// надо установить homebrew
+// https://github.com/daniiomir/faq_for_school_21#brew
+// затем запустить
+// brew install readline
+// также нужно прописать в строках компиляции пути к библиотекам:
+// https://21born2code.slack.com/archives/C0183HABMQQ/p1635870909122200?thread_ts=1635853265.120900&cid=C0183HABMQQ
+
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
