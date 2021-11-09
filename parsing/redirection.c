@@ -6,13 +6,13 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 19:39:01 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:47:02 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	new_write_redir(t_mini *mini, char *filename, int type)
+int	new_write_redir(t_mini *mini, char *filename, int type)
 {
 	int	fd;
 
@@ -22,6 +22,12 @@ void	new_write_redir(t_mini *mini, char *filename, int type)
 			fd = open(mini->write_file, O_WRONLY | O_CREAT | O_APPEND, 0666);
 		else
 			fd = open(mini->write_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (fd == -1)
+		{
+			printf("bash: %s: No such file or directory\n",
+				mini->write_file);
+			return (-1);
+		}
 		close(fd);
 		free(mini->write_file);
 		mini->write_file = filename;
@@ -32,6 +38,7 @@ void	new_write_redir(t_mini *mini, char *filename, int type)
 		mini->write_file = filename;
 		mini->write_type = type;
 	}
+	return (0);
 }
 
 int	new_read_redir(t_mini *mini, char *filename)
@@ -81,7 +88,7 @@ int	read_redir(t_mini *mini, char **line)
 	return (new_read_redir(mini, filename));
 }
 
-void	write_redir(t_mini *mini, char **line)
+int	write_redir(t_mini *mini, char **line)
 {
 	char	*filename;
 	int		type;
@@ -102,5 +109,5 @@ void	write_redir(t_mini *mini, char **line)
 		filename = ft_chrjoin(filename, **line);
 		(*line)++;
 	}
-	new_write_redir(mini, filename, type);
+	return (new_write_redir(mini, filename, type));
 }

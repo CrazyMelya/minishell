@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 21:26:01 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ char	*search_key(char *key, t_env *env)
 	while (env)
 	{
 		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
-			return(env->content);
+			return (env->content);
+		env = env->next;
 	}
 	return (NULL);
 }
@@ -88,4 +89,26 @@ int	here_doc(char *line)
 		line++;
 	}
 	return (-1);
+}
+
+int	print_redir_error(char **line)
+{
+	(*line)++;
+	if (**line == **(line - 1))
+		(*line)++;
+	while (**line == ' ')
+		(*line)++;
+	if (ft_strchr(SPEC2, **line) || !(**line))
+	{
+		if (*ft_strchr(SPEC2, **line) == '>' && **(line + 1) == '>')
+			printf("%s `>>'\n", SYNT_ERR);
+		else if (*ft_strchr(SPEC2, **line) == '<' && **(line + 1) == '<')
+			printf("%s `<<'\n", SYNT_ERR);
+		else if (!(*line))
+			printf("%s `newline'\n", SYNT_ERR);
+		else
+			printf("%s `%c'\n", SYNT_ERR, *ft_strchr(SPEC2, **line));
+		return (-1);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:21:18 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 20:12:27 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,15 @@ t_env	*envp_to_list(char **envp)
 			key = ft_chrjoin(key, envp[i][j]);
 			j++;
 		}
-		env->key = key;
 		content = NULL;
+		j++;
 		while (envp[i][j])
 		{
 			content = ft_chrjoin(content, envp[i][j]);
 			j++;
 		}
 		add_env(&env, new_env(key, content));
+		i++;
 	}
 	return (env);
 }

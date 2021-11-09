@@ -4,3 +4,4 @@ kak
 *.o
 lo
 minishell
+libft/
