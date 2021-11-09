@@ -32,14 +32,6 @@
 #define SUCCESS 0
 // flag - есть -n или нет
 
-typedef struct s_env
-{
-char *key;
-char *content;
-int 	flag;
-struct s_env *next;
-
-}				t_env;
 
 char *ft_pwd()
 {
@@ -399,7 +391,7 @@ void print_pwd_and_old_pwd(t_env *envr)
 	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
 	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
 
-//}
+}
 
 void ft_unset(char *unset, t_env **envr)
 {
@@ -413,13 +405,6 @@ void ft_unset(char *unset, t_env **envr)
 
 
 
-
-
-
-void ft_exit()
-{
-
-}
 
 
 int	main(int argc, char **argv, char **env)

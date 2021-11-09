@@ -27,28 +27,28 @@
 #define STDERR 2
 #define SUCCESS 0
 
-int ft_echo(char *str, int flag, int fd)
-{
-	ft_putstr_fd(str, fd);
-	if (flag)
-		ft_putstr_fd("\n", fd);
-	return(SUCCESS);
-}
+// int ft_echo(char *str, int flag, int fd)
+// {
+// 	ft_putstr_fd(str, fd);
+// 	if (flag)
+// 		ft_putstr_fd("\n", fd);
+// 	return(SUCCESS);
+// }
 
 // "/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)""
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
+// void	ft_putstr_fd(char *s, int fd)
+// {
+// 	int	i;
 
-	i = 0;
-	if (s == NULL)
-		return ;
-	while (s[i] != '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
-}
+// 	i = 0;
+// 	if (s == NULL)
+// 		return ;
+// 	while (s[i] != '\0')
+// 	{
+// 		write(fd, &s[i], 1);
+// 		i++;
+// 	}
+// }
 
 void	restore_prompt(int sig)
 {
@@ -124,7 +124,7 @@ int main(int argc, char **argv, char **env)
 	while(1)
 	{
 	str = readline("bash$ ");
-	ft_echo(str, 1 , 1);
+	ft_echo(argc, argv);
 	if (str == '\0')
 		myint3();
 	}

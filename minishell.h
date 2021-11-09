@@ -6,11 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/11/07 16:20:40 by vbackyet         ###   ########.fr       */
-=======
-/*   Updated: 2021/11/09 19:21:34 by cliza            ###   ########.fr       */
->>>>>>> e9f03b8ab1a7a59cdba981094d9be00a1343fb4c
+/*   Updated: 2021/11/09 20:17:18 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +19,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <fcntl.h>
-<<<<<<< HEAD
-=======
 #define SPEC "<>$\'\" |"
 #define SPEC2 "><| "
 #define SPEC3 "<>\'\" |"
@@ -37,16 +31,12 @@ typedef struct s_env
 	int				flag;
 	struct s_env	*next;
 }				t_env;
->>>>>>> e9f03b8ab1a7a59cdba981094d9be00a1343fb4c
 
 typedef	struct s_mini
 {
 	int				argc;
 	char			**argv;
-<<<<<<< HEAD
-=======
 	t_env			*env;
->>>>>>> e9f03b8ab1a7a59cdba981094d9be00a1343fb4c
 	char			*write_file;
 	int				write_type;
 	char			*read_file;
@@ -55,11 +45,6 @@ typedef	struct s_mini
 	
 }				t_mini;
 
-<<<<<<< HEAD
-// int ft_echo(int argc, char **argv);
-
-#endif
-=======
 int 	ft_echo(int argc, char **argv);
 int		check_line(char *line);
 void	write_redir(t_mini *mini, char **line);
@@ -70,6 +55,6 @@ char	**add_arg(int argc, char **argv, char *arg);
 char	*search_key(char *key, t_env *env);
 t_mini	*new_mini(char *line, t_env *env);
 int		here_doc(char *line);
+void	ft_putstr_fd(char *s, int fd);
 
 #endif
->>>>>>> e9f03b8ab1a7a59cdba981094d9be00a1343fb4c

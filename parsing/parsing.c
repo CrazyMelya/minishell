@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 20:10:50 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	parse_dollar(t_mini *mini, char **line, char **arg)
 
 void	single_quotes(char **line, char **arg)
 {
+	(*line)++;
 	while (**line != '\'')
 	{
 		*arg = ft_chrjoin(*arg, **line);
@@ -51,6 +52,7 @@ void	single_quotes(char **line, char **arg)
 
 void	double_quotes(t_mini *mini, char **line, char **arg)
 {
+	(*line)++;
 	while (**line != '\"' && **line)
 	{
 		if (**line == '$')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:54:28 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ char	*search_key(char *key, t_env *env)
 	{
 		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
 			return(env->content);
+		env = env->next;
 	}
 	return (NULL);
 }

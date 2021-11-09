@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:21:18 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 20:18:00 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_env	*envp_to_list(char **envp)
 			key = ft_chrjoin(key, envp[i][j]);
 			j++;
 		}
-		env->key = key;
 		content = NULL;
 		while (envp[i][j])
 		{
@@ -95,6 +94,7 @@ t_env	*envp_to_list(char **envp)
 			j++;
 		}
 		add_env(&env, new_env(key, content));
+		i++;
 	}
 	return (env);
 }
@@ -223,41 +223,41 @@ void	print_mini(t_mini *mini)
 	ft_putchar_fd('\n', 1);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	char	*line;
-	t_mini	*mini;
-	t_mini	*temp;
-	t_env	*env;
-	//pid_t	pid;
-	int		i;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	char	*line;
+// 	t_mini	*mini;
+// 	t_mini	*temp;
+// 	t_env	*env;
+// 	//pid_t	pid;
+// 	int		i;
 	
-	argc = 0;
-	argv = 0;
-	env = envp_to_list(envp);
-	while (1)
-	{
-		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
-		add_history(line);
-		if (ft_strncmp(line, "", 1))
-		{
-			mini = new_mini(line, env);
-			if (check_line(line))
-				continue;
-			if (ft_parse(line, mini))
-				continue;
-			//pid = fork();
-			i = 0;
-			temp = mini;
-			while (temp)
-			{
-				print_mini(temp);
-				temp = temp->next;
-			}
-			//if (!pid)
-			//	run_program(mini, envp);
-			wait(0);
-		}
-		free(line);
-	}
-}
+// 	argc = 0;
+// 	argv = 0;
+// 	env = envp_to_list(envp);
+// 	while (1)
+// 	{
+// 		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
+// 		add_history(line);
+// 		if (ft_strncmp(line, "", 1))
+// 		{
+// 			mini = new_mini(line, env);
+// 			if (check_line(line))
+// 				continue;
+// 			if (ft_parse(line, mini))
+// 				continue;
+// 			//pid = fork();
+// 			i = 0;
+// 			temp = mini;
+// 			while (temp)
+// 			{
+// 				print_mini(temp);
+// 				temp = temp->next;
+// 			}
+// 			//if (!pid)
+// 			//	run_program(mini, envp);
+// 			wait(0);
+// 		}
+// 		free(line);
+// 	}
+// }
