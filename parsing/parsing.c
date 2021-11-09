@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 20:07:34 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,21 @@ void	parse_dollar(t_mini *mini, char **line, char **arg)
 
 	key = NULL;
 	(*line)++;
-	if (**line == '$')
+	if (**line != '$' && **line != '?')
 	{
-		temp = *arg;
-		key = ft_itoa(getpid());
-		*arg = ft_strjoin(*arg, key);
-		free(temp);
-		free(key);
-		(*line)++;
-		return ;
+		while (**line && !ft_strchr(SPEC, **line))
+		{
+			key = ft_chrjoin(key, **line);
+			(*line)++;
+		}
 	}
-	while (**line && !ft_strchr(SPEC, **line))
+	else
 	{
-		key = ft_chrjoin(key, **line);
+		key = ft_strdup(*line);
 		(*line)++;
 	}
 	temp = *arg;
-	*arg = ft_strjoin(*arg, search_key(key, mini->envp));
+	*arg = ft_strjoin(*arg, search_key(key, mini->env));
 	free(temp);
 	free(key);
 	return ;
@@ -84,7 +82,7 @@ int	parse_continue(t_mini **mini, char *arg, char **line)
 	{
 		while (**line == '|')
 			(*line)++;
-		(*mini)->next = new_mini(*line, (*mini)->envp);
+		(*mini)->next = new_mini(*line, (*mini)->env);
 		*mini = (*mini)->next;
 	}
 	(*line)++;

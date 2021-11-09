@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:58:29 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 19:33:39 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,26 @@
 
 int	check_quotes(char *line)
 {
+	char	q;
+
 	while (*line)
 	{
-		if (*line == '\'')
+		if (*line == ';')
 		{
-			line++;
-			while (*line != '\'')
-			{
-				if (!(*line))
-					return (-1);
-				line++;
-			}
+			printf("bash: syntax error near unexpected token `;'\n");
+			return (-1);
 		}
-		if (*line == '\"')
+		if (*line == '\'' || *line == '\"')
 		{
+			q = *line;
 			line++;
-			while (*line != '\"')
+			while (*line != q)
 			{
 				if (!(*line))
+				{
+					printf("bash: syntax error `unclosed quotes'\n");
 					return (-1);
+				}
 				line++;
 			}
 		}
@@ -120,23 +121,8 @@ int	check_pipe_postfix(char *line)
 
 int	check_line(char *line)
 {
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == ';')
-		{
-			printf("bash: syntax error near unexpected token `;'\n");
-			return (-1);
-		}
-		i++;
-	}
 	if (check_quotes(line))
-	{
-		ft_putstr_fd("bash: syntax error \"quotes is not closed\"\n", 2);
 		return (-1);
-	}
 	if (check_pipe_prefix(line))
 		return (-1);
 	if (check_pipe_postfix(line))

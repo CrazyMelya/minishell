@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 20:11:45 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:21:06 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,31 +57,35 @@ char	*ft_chrjoin(char *str, char c)
 	return (new);
 }
 
-char	*search_key(char *key, char **envp)
+char	*search_key(char *key, t_env *env)
 {
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (envp[i])
+	if (*key == '$')
+		return (ft_itoa(getpid()));
+	while (env)
 	{
-		result = NULL;
-		j = 0;
-		while (envp[i][j] != '=')
-		{
-			result = ft_chrjoin(result, envp[i][j]);
-			j++;
-		}
-		if (!ft_strncmp(key, result, ft_strlen(key) + 1))
-		{
-			free(result);
-			result = ft_strchr(envp[i], '=');
-			result++;
-			return (result);
-		}
-		i++;
-		free(result);
+		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
+			return(env->content);
 	}
 	return (NULL);
+}
+
+int	here_doc(char *line)
+{
+	while (*line && *line != '|')
+	{
+		if (*line == '\"')
+		{
+			while (*line != '\"' && *line)
+				line++;
+		}
+		if (*line == '\'')
+		{
+			while (*line != '\'' && *line)
+				line++;
+		}
+		if (*line == '<' && *(line + 1) == '<')
+			return (1);
+		line++;
+	}
+	return (-1);
 }

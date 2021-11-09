@@ -6,34 +6,13 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/08 20:33:02 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/09 19:21:18 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	here_doc(char *line)
-{
-	while (*line && *line != '|')
-	{
-		if (*line == '\"')
-		{
-			while (*line != '\"' && *line)
-				line++;
-		}
-		if (*line == '\'')
-		{
-			while (*line != '\'' && *line)
-				line++;
-		}
-		if (*line == '<' && *(line + 1) == '<')
-			return (1);
-		line++;
-	}
-	return (-1);
-}
-
-t_mini	*new_mini(char *line, char **envp)
+t_mini	*new_mini(char *line, t_env *env)
 {
 	t_mini *mini;
 
@@ -43,7 +22,7 @@ t_mini	*new_mini(char *line, char **envp)
 	mini->write_file = NULL;
 	mini->write_type = -1;
 	mini->read_file = NULL;
-	mini->envp = envp;
+	mini->env = env;
 	mini->read_type = here_doc(line);
 	mini->next = NULL;
 	return (mini);
@@ -60,6 +39,64 @@ void	free_arr(char ***arr)
 		i++;
 	}
 	free(*arr);
+}
+
+t_env	*new_env(char *key, char *content)
+{
+	t_env *new;
+
+	new = malloc(sizeof(t_env));
+	new->key = key;
+	new->content = content;
+	new->flag = 0;
+	new->next = NULL;
+	return (new);
+}
+
+void	add_env(t_env **env, t_env *new)
+{
+	t_env *temp;
+
+	if (!(*env))
+		*env = new;
+	else
+	{
+		temp = *env;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new;
+	}
+}
+
+t_env	*envp_to_list(char **envp)
+{
+	int		i;
+	t_env 	*env;
+	char	*content;
+	char	*key;
+	int		j;
+
+	i = 0;
+	env = NULL;
+	while (envp[i])
+	{
+		key = NULL;
+		j = 0;
+		while (envp[i][j] != '=')
+		{
+			key = ft_chrjoin(key, envp[i][j]);
+			j++;
+		}
+		env->key = key;
+		content = NULL;
+		while (envp[i][j])
+		{
+			content = ft_chrjoin(content, envp[i][j]);
+			j++;
+		}
+		add_env(&env, new_env(key, content));
+	}
+	return (env);
 }
 
 char	*search_path(char **envp, char *cmd)
@@ -191,18 +228,20 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	t_mini	*mini;
 	t_mini	*temp;
+	t_env	*env;
 	//pid_t	pid;
 	int		i;
 	
 	argc = 0;
 	argv = 0;
+	env = envp_to_list(envp);
 	while (1)
 	{
 		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
 		add_history(line);
 		if (ft_strncmp(line, "", 1))
 		{
-			mini = new_mini(line, envp);
+			mini = new_mini(line, env);
 			if (check_line(line))
 				continue;
 			if (ft_parse(line, mini))
@@ -216,7 +255,7 @@ int	main(int argc, char **argv, char **envp)
 				temp = temp->next;
 			}
 			//if (!pid)
-			//run_program(mini, envp);
+			//	run_program(mini, envp);
 			wait(0);
 		}
 		free(line);
