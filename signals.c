@@ -113,20 +113,20 @@ void myint3()
 
 
 
-int main(int argc, char **argv, char **env)
-{
+// int main(int argc, char **argv, char **env)
+// {
 
-	char	*str;
+// 	char	*str;
 
-	signal(2, myint);
-	signal(3, myint2);
+// 	signal(2, myint);
+// 	signal(3, myint2);
 	
-	while(1)
-	{
-	str = readline("bash$ ");
-	ft_echo(argc, argv);
-	if (str == '\0')
-		myint3();
-	}
-	// printf("|||%s|||\n", str);
-}
+// 	while(1)
+// 	{
+// 	str = readline("bash$ ");
+// 	ft_echo(argc, argv);
+// 	if (str == '\0')
+// 		myint3();
+// 	}
+// 	// printf("|||%s|||\n", str);
+// }

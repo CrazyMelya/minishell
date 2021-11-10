@@ -29,18 +29,10 @@
 
 
 
-#define SUCCESS 0
+
 // flag - есть -n или нет
 
 
-char *ft_pwd()
-{
-	char *dir;
-	dir = malloc(1024);
-	getcwd(dir, 1024);
-	return dir;
-	//или просто распечатать?
-}
 
 void ft_putstr_fd(char *str, int fd)
 {
@@ -54,32 +46,6 @@ void ft_putstr_fd(char *str, int fd)
 
 //}
 
-int ft_echo(int argc, char **argv)
-{
-	int	i;
-	int	flag;
-
-	i = 1;
-	flag = 0;
-	if (argc > 1)
-	{
-		while (argv[i] && !ft_strncmp(argv[i], "-n", 3))
-		{
-			flag = 1;
-			i++;
-		}
-		while (argv[i])
-		{
-			ft_putstr_fd(argv[i], 1);
-			if (argv[i + 1])
-				ft_putchar_fd(' ', 1);
-			i++;
-		}
-	}
-	if (!flag)
-		ft_putchar_fd('\n', 1);
-	return(SUCCESS);
-}
 
 
 
@@ -105,24 +71,6 @@ int	ft_strcmp(char *s1, char *s2)
 }
 
 
-t_env *find_on_head(t_env *env, char *head)
-{
-
-	while (env->next != NULL)
-	{
-		if (ft_strcmp(env->key, head) == 0)
-			return(env);
-		// printf("+ %s\n", env->key);
-		env = env->next;
-		// printf("- %s\n", env->key);
-	}
-	if (ft_strcmp(env->key, head) == 0)
-		return(env);
-		// printf("+ %s\n", env->key);
-	env = env->next;
-	printf("NO WAY %s\n", head);
-	return(NULL);
-}
 
 
 t_env *finde_pre_on_head(t_env *env, char *head)
@@ -145,45 +93,6 @@ t_env *finde_pre_on_head(t_env *env, char *head)
 }
 
 
-int do_oldpwd(t_env *env)
-{
-	t_env *my_str = find_on_head(env, "OLDPWD");
-
-	my_str->content = find_on_head(env, "PWD")->content;
-	//Заменяем старый путь
-// ret = chdir(env_path);
-	return(0);
-}
-
-
-int do_pwd(char *path, t_env *env)
-{
-	//Заменяем текущий путь
-	t_env *my_str = find_on_head(env, "PWD");
-	my_str->content = path;
-	return(0);
-}
-
-int ft_cd(char *path, t_env *env)
-{
-	// функция меняет путь pwd и oldpwd
-	//для того, чтобы функция меняла нужен лист формата - неважно какого формата есть структура head и content
-	//проверка на существование этого пути
-	// замена предыдущего на настоящий
-	// замена настоящего на предстоящий
-
-	// 1) просто путь
-	int r = chdir(path);
-	char *full_path = ft_pwd();
-	if (path == NULL)
-	{
-		
-	}
-	do_oldpwd(env);
-	
-	do_pwd(full_path, env);
-	return(SUCCESS);
-}
 
 
 
@@ -330,34 +239,6 @@ void show_sorted_env(t_env *envr)
 
 }
 
-int ft_export(t_env *export, t_env **envr, int flag)
-{
-	//Функция для того чтобы экспортировть перменные в переменную окружения - чужую - нашу - ненастоящую!!
-	if (flag)
-	{
-		printf("sdfghgfdesd+=======\n");
-		show_sorted_env(*envr);
-		return(0);
-	}
-	else{
-	t_env *first_el = *envr;
-	t_env *export2;
-	export2 = (t_env*)malloc(sizeof(t_env));
-	export2->key = "lylyly";
-	export2->content = "bububub";
-	export2->next = NULL;
-	export2->flag  = 0;
-	paste_env(export, envr);
-	paste_env(export2, envr);
-	printf("!!!!!]]]]\n\n\n");
-	*envr = first_el;
-	// show_env(*envr);
-	show_sorted_env(*envr);
-	printf("!!!!!]]]]\n\n\n");
-	// sort_env(envr);
-	
-	return(0);}
-}
 
 
 t_env	*insert_into_stack()
@@ -403,7 +284,44 @@ void ft_unset(char *unset, t_env **envr)
 	pre->next = after;
 }
 
+char	*ft_strjoin_env(char const *s1, char const *s2)
+{
+	size_t	len;
+	int		i;
+	char	*kuda;
 
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	kuda = (char *)malloc(sizeof(char) * (len + 2));
+	if (!kuda)
+		return (NULL);
+	while (*s1)
+		kuda[i++] = *s1++;
+	kuda[i++] = '=';
+	while (*s2)
+		kuda[i++] = *s2++;
+	kuda[i] = '\0';
+	return (kuda);
+}
+
+
+char **from_list_to_massive(t_env *envr)
+{
+	int t = 0;
+	int i = detect_len_of_stack(envr);
+	char **env_in_list =malloc(i*sizeof(char *));
+	while(t < i)
+	{
+		
+		env_in_list[t] = ft_strjoin_env(envr->key, envr->content);
+		envr = envr->next;
+		t++;
+	}
+	env_in_list[t] = 0;
+	return (env_in_list);
+}
 
 
 
@@ -433,6 +351,9 @@ int	main(int argc, char **argv, char **env)
 	printf("+================================================\n");
 	ft_unset("lylyly",&envr);
 	ft_export(&export,&envr,1);
+	// envr = envp_to_list(env);
+	// char **listik = from_list_to_massive(envr);
+	// printf("[[%s]]\n", listik[0] );
 
 	// ft_unset();
 //что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 

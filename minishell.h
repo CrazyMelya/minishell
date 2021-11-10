@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 20:17:18 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/10 19:54:06 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <fcntl.h>
+#define SUCCESS 0
 #define SPEC "<>$\'\" |"
 #define SPEC2 "><| "
 #define SPEC3 "<>\'\" |"
@@ -56,5 +57,11 @@ char	*search_key(char *key, t_env *env);
 t_mini	*new_mini(char *line, t_env *env);
 int		here_doc(char *line);
 void	ft_putstr_fd(char *s, int fd);
-
+t_env *find_on_head(t_env *env, char *head);
+void show_sorted_env(t_env *envr);
+void print_pwd_and_old_pwd(t_env *envr);
+void ft_unset(char *unset, t_env **envr);
+int ft_export(t_env *export, t_env **envr, int flag);
+t_env	*envp_to_list(char **envp);
+void paste_env(t_env *export, t_env **envr);
 #endif
