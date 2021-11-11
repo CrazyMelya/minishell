@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:58:29 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 21:05:24 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/10 20:29:45 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	check_redir(char *line)
 			q = *line++;
 			flag = 1;
 		}
-		if (flag == 0 && (*line == '>' || *line == '<'))
+		if (!flag && (*line == '>' || *line == '<'))
 		{
 			if (print_redir_error(&line))
 				return (-1);

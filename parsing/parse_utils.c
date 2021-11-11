@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 21:26:01 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/11 20:34:17 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,39 +70,39 @@ char	*search_key(char *key, t_env *env)
 	return (NULL);
 }
 
-int	here_doc(char *line)
-{
-	while (*line && *line != '|')
-	{
-		if (*line == '\"')
-		{
-			while (*line != '\"' && *line)
-				line++;
-		}
-		if (*line == '\'')
-		{
-			while (*line != '\'' && *line)
-				line++;
-		}
-		if (*line == '<' && *(line + 1) == '<')
-			return (1);
-		line++;
-	}
-	return (-1);
-}
+// int	here_doc(char *line)
+// {
+// 	while (*line && *line != '|')
+// 	{
+// 		if (*line == '\"')
+// 		{
+// 			while (*line != '\"' && *line)
+// 				line++;
+// 		}
+// 		if (*line == '\'')
+// 		{
+// 			while (*line != '\'' && *line)
+// 				line++;
+// 		}
+// 		if (*line == '<' && *(line + 1) == '<')
+// 			return (1);
+// 		line++;
+// 	}
+// 	return (-1);
+// }
 
 int	print_redir_error(char **line)
 {
-	(*line)++;
-	if (**line == **(line - 1))
+	if (**line == *(*line + 1))
 		(*line)++;
+	(*line)++;
 	while (**line == ' ')
 		(*line)++;
-	if (ft_strchr(SPEC2, **line) || !(**line))
+	if (!(**line) || ft_strchr(SPEC2, **line))
 	{
-		if (*ft_strchr(SPEC2, **line) == '>' && **(line + 1) == '>')
+		if (*ft_strchr(SPEC2, **line) == '>' && *(*line + 1) == '>')
 			printf("%s `>>'\n", SYNT_ERR);
-		else if (*ft_strchr(SPEC2, **line) == '<' && **(line + 1) == '<')
+		else if (*ft_strchr(SPEC2, **line) == '<' && *(*line + 1) == '<')
 			printf("%s `<<'\n", SYNT_ERR);
 		else if (!(*line))
 			printf("%s `newline'\n", SYNT_ERR);

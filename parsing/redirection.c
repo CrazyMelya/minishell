@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:47:02 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:17:52 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,43 +41,45 @@ int	new_write_redir(t_mini *mini, char *filename, int type)
 	return (0);
 }
 
-int	new_read_redir(t_mini *mini, char *filename)
+t_redir	*new_redir(char *filename, int type)
 {
-	int	fd;
+	t_redir	*new;
 
-	if (mini->read_file)
-	{
-		if (!mini->read_type)
-		{
-			fd = open(mini->read_file, O_RDONLY);
-			if (fd == -1)
-			{
-				printf("bash: %s: No such file or directory\n",
-					mini->read_file);
-				return (-1);
-			}
-			close(fd);
-		}
-		free(mini->read_file);
-		mini->read_file = filename;
-	}
-	else
-	{
-		mini->read_file = filename;
-		if (mini->read_type == -1)
-			mini->read_type = 0;
-	}
-	return (0);
+	new = malloc(sizeof(t_redir));
+	new->filename = filename;
+	new->type = type;
+	new->next = NULL;
+	return (new);
 }
 
-int	read_redir(t_mini *mini, char **line)
+void	add_redir(t_redir **head, t_redir *new)
+{
+	t_redir	*temp;
+
+	if (!(*head))
+		*head = new;
+	else
+	{
+		temp = *head;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new;
+	}
+}
+
+void	read_redir(t_mini *mini, char **line)
 {
 	char	*filename;
+	int		type;
 
 	filename = NULL;
 	(*line)++;
+	type = 0;
 	if (**line == '<')
+	{
 		(*line)++;
+		type = 1;
+	}
 	while (**line == ' ')
 		(*line)++;
 	while (**line != ' ' && **line)
@@ -85,7 +87,7 @@ int	read_redir(t_mini *mini, char **line)
 		filename = ft_chrjoin(filename, **line);
 		(*line)++;
 	}
-	return (new_read_redir(mini, filename));
+	add_redir(&mini->read_redir, new_redir(filename, type));
 }
 
 int	write_redir(t_mini *mini, char **line)
