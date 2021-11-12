@@ -3,7 +3,7 @@ NAME	=	minishell
 HEAD	=	minishell.h
 
 # CFLAGS	=	-Wall -Wextra -Werror
-USER = vbackyet
+USER	=	vbackyet
 CC		=	gcc
 
 # SRCS	=	commands.c

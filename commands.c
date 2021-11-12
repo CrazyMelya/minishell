@@ -325,42 +325,42 @@ char **from_list_to_massive(t_env *envr)
 
 
 
-int	main(int argc, char **argv, char **env)
-{
-	char	*str;
+// int	main(int argc, char **argv, char **env)
+// {
+// 	char	*str;
 
-	str = readline("bash$ ");
-	t_env *envr;
-	t_env export;
-	// ft_echo(str, 0 , 1);
-	envr = insert_into_stack();
-	// listprint(envr);
-	// int r = chdir("/Users/vbackyet/Desktop/moi_minishell/minishell/kuku");
-	// printf("(%d)\n",r);
-	// print_pwd_and_old_pwd(envr);
-	// ft_cd(str, envr);
+// 	str = readline("bash$ ");
+// 	t_env *envr;
+// 	t_env export;
+// 	// ft_echo(str, 0 , 1);
+// 	envr = insert_into_stack();
+// 	// listprint(envr);
+// 	// int r = chdir("/Users/vbackyet/Desktop/moi_minishell/minishell/kuku");
+// 	// printf("(%d)\n",r);
+// 	// print_pwd_and_old_pwd(envr);
+// 	// ft_cd(str, envr);
 	
-	// ft_pwd();
-	export.key = "ONE";
-	export.content = "TWO bla bla bla";
-	export.next = NULL;
-	export.flag = 0;
-	ft_export(&export,&envr,0);
+// 	// ft_pwd();
+// 	export.key = "ONE";
+// 	export.content = "TWO bla bla bla";
+// 	export.next = NULL;
+// 	export.flag = 0;
+// 	ft_export(&export,&envr,0);
 	
-	ft_export(&export,&envr,1);
-	printf("+================================================\n");
-	ft_unset("lylyly",&envr);
-	ft_export(&export,&envr,1);
-	// envr = envp_to_list(env);
-	// char **listik = from_list_to_massive(envr);
-	// printf("[[%s]]\n", listik[0] );
+// 	ft_export(&export,&envr,1);
+// 	printf("+================================================\n");
+// 	ft_unset("lylyly",&envr);
+// 	ft_export(&export,&envr,1);
+// 	// envr = envp_to_list(env);
+// 	// char **listik = from_list_to_massive(envr);
+// 	// printf("[[%s]]\n", listik[0] );
 
-	// ft_unset();
-//что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 
-	// char *dir = getenv("PWD");
-	// printf("getcwd:  (%s)\n", ft_pwd());
-	// print_pwd_and_old_pwd(envr);
-}
+// 	// ft_unset();
+// //что мне нужно - чтобы ты распрсил перменню окружения и все поместил с список структур 
+// 	// char *dir = getenv("PWD");
+// 	// printf("getcwd:  (%s)\n", ft_pwd());
+// 	// print_pwd_and_old_pwd(envr);
+// }
 
 
 // env | grep PATH

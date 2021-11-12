@@ -23,38 +23,44 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <signal.h>
-#include "minishell.h"
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <fcntl.h>
+// #include "minishell.h"
 #define STDERR 2
 #define SUCCESS 0
 
-// int ft_echo(char *str, int flag, int fd)
-// {
-// 	ft_putstr_fd(str, fd);
-// 	if (flag)
-// 		ft_putstr_fd("\n", fd);
-// 	return(SUCCESS);
-// }
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (s == NULL)
+		return ;
+	while (s[i] != '\0')
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
+}
+
+int ft_echo(char *str, int flag, int fd)
+{
+	ft_putstr_fd(str, fd);
+	if (flag)
+		ft_putstr_fd("\n", fd);
+	return(SUCCESS);
+}
 
 // "/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)""
-// void	ft_putstr_fd(char *s, int fd)
-// {
-// 	int	i;
 
-// 	i = 0;
-// 	if (s == NULL)
-// 		return ;
-// 	while (s[i] != '\0')
-// 	{
-// 		write(fd, &s[i], 1);
-// 		i++;
-// 	}
-// }
 
 void	restore_prompt(int sig)
 {
 	// g_ret_number = 130;
 	write(1, "\n", 1); // перенос на новую строку
-	rl_replace_line("");
+	rl_replace_line("", 234567890);
 	rl_on_new_line(); //сообщить процедурам обновления, что мы перешли на новую строку
 	rl_redisplay(); //пишет строку bash
 	(void)sig;
@@ -113,20 +119,22 @@ void myint3()
 
 
 
-// int main(int argc, char **argv, char **env)
-// {
+int main(int argc, char **argv, char **env)
+{
 
-// 	char	*str;
+	char	*str;
 
-// 	signal(2, myint);
-// 	signal(3, myint2);
-	
-// 	while(1)
-// 	{
-// 	str = readline("bash$ ");
-// 	ft_echo(argc, argv);
-// 	if (str == '\0')
-// 		myint3();
-// 	}
-// 	// printf("|||%s|||\n", str);
-// }
+	signal(2, myint);
+	signal(3, myint2);
+	rl_catch_signals = 0;
+	while(1)
+	{
+	str = readline("bash$ ");
+	ft_echo( str, 0, 1);
+	if (str == '\0')
+		myint3();
+	}
+	// printf("|||%s|||\n", str);
+}
+
+// gcc -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib/  -lreadline signals.c

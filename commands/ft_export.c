@@ -5,7 +5,6 @@ int ft_export(t_env *export, t_env **envr, int flag)
 	//Функция для того чтобы экспортировть перменные в переменную окружения - чужую - нашу - ненастоящую!!
 	if (flag)
 	{
-		printf("sdfghgfdesd+=======\n");
 		show_sorted_env(*envr);
 		return(0);
 	}
