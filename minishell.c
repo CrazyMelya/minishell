@@ -6,13 +6,28 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/11 21:45:24 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/22 15:13:11 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	status = 0;
+char	**argv_to_arr(t_argv *argv, int	argc)
+{
+	char	**result;
+	int		i;
+
+	result = malloc(sizeof(char *) * (argc + 1));
+	i = 0;
+	while (i < argc)
+	{
+		result[i] = argv->arg;
+		i++;
+		argv = argv->next;
+	}
+	result[i] = NULL;
+	return(result);
+}
 
 t_mini	*new_mini(t_env *env)
 {
@@ -92,31 +107,72 @@ t_env	*envp_to_list(char **envp)
 		content = NULL;
 		j++;
 		while (envp[i][j])
-		{
-			content = ft_chrjoin(content, envp[i][j]);
-			j++;
-		}
+			content = ft_chrjoin(content, envp[i][j++]);
 		add_env(&env, new_env(key, content));
 		i++;
 	}
 	return (env);
 }
 
-char	*search_path(char **envp, char *cmd)
+int	detect_len_of_stack(t_env *env)
 {
-	char	**pathes;
-	char	*path;
-	char	*sub_path;
-	int		i;
+	int	i;
 
 	i = 0;
-	while (envp[i])
+	if (env == NULL)
+		return (i);
+	while (env)
 	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			sub_path = envp[i];
 		i++;
+		env = env->next;
 	}
-	pathes = ft_split(sub_path + 5, ':');
+	return (i);
+}
+
+char	*ft_strjoin_env(char const *s1, char const *s2)
+{
+	size_t	len;
+	int		i;
+	char	*kuda;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	kuda = (char *)malloc(sizeof(char) * (len + 2));
+	if (!kuda)
+		return (NULL);
+	while (*s1)
+		kuda[i++] = *s1++;
+	kuda[i++] = '=';
+	while (*s2)
+		kuda[i++] = *s2++;
+	kuda[i] = '\0';
+	return (kuda);
+}
+
+char **envp_to_arr(t_env *envr)
+{
+	int t = 0;
+	int i = detect_len_of_stack(envr);
+	char **env_in_list =malloc(i*sizeof(char *));
+	while(t < i)
+	{
+		
+		env_in_list[t] = ft_strjoin_env(envr->key, envr->content);
+		envr = envr->next;
+		t++;
+	}
+	env_in_list[t] = 0;
+	return (env_in_list);
+}
+
+char	*search_path2(char **pathes, char *cmd)
+{
+	int		i;
+	char	*sub_path;
+	char	*path;
+
 	i = 0;
 	while (pathes[i])
 	{
@@ -135,112 +191,20 @@ char	*search_path(char **envp, char *cmd)
 	return (NULL);
 }
 
-void	run_program(t_mini *mini, int **fd, int n, int size, char **envp)
+char	*search_path(t_env *env, char *cmd)
 {
-	char	*path;
-	char	*line;
-	int		fds;
-	t_redir	*temp;
-	int		i;
+	char	**pathes;
+	char	*sub_path;
 
-	temp = mini->read_redir;
-	while (temp)
+	sub_path = NULL;
+	while (env || !sub_path)
 	{
-		if (temp->type)
-		{
-			if (mini->here_doc[0] != -1)
-				close(mini->here_doc[0]);
-			pipe(mini->here_doc);
-			line = readline("> ");
-			while (ft_strncmp(line , temp->filename, ft_strlen(line) + 1))
-			{
-				ft_putendl_fd(line, mini->here_doc[1]);
-				free(line);
-				line = readline("> ");
-			}
-			close(mini->here_doc[1]);
-		}
-		temp = temp->next;
+		if (!ft_strncmp(env->key, "PATH", 5))
+			sub_path = env->content;
+		env = env->next;
 	}
-	temp = mini->read_redir;
-	if (temp)
-	{
-		while (temp)
-		{
-			if (!temp->type)
-			{
-				fds = open(temp->filename, O_RDONLY);
-				if (fds == -1)
-				{
-					ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-					ft_putstr_fd(temp->filename, 2);
-					ft_putstr_fd(": no such file or directory\n", 2);
-					exit(-1);
-				}
-				close(fds);
-			}
-			temp = temp->next;
-		}
-		temp = mini->read_redir;
-		while (temp->next)
-			temp = temp->next;
-		if (temp->type)
-			fds = mini->here_doc[0];
-		else
-		{
-			if (mini->here_doc[0] != -1)
-				close(mini->here_doc[0]);
-			fds = open(temp->filename, O_RDONLY);
-		}
-		dup2(fds, 0);
-		close(fds);
-	}
-	else if (size != 1 && n)
-		dup2(fd[n - 1][0], 0);
-	if (mini->write_file)
-	{
-		if (mini->write_type)
-			fds = open(mini->write_file, O_WRONLY | O_CREAT | O_APPEND, 0666);
-		else
-			fds = open(mini->write_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			if (fds == -1)
-		{
-			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-			ft_putstr_fd(mini->write_file, 2);
-			ft_putstr_fd(": no such file or directory\n", 2);
-			exit(0);
-		}
-		dup2(fds, 1);
-		close(fds);
-	}
-	else if (size != 1 && n != size - 1)
-		dup2(fd[n][1], 1);
-	i = 0;
-	while (i < size)
-	{
-		close(fd[i][0]);
-		close(fd[i][1]);
-		i++;
-	}
-	if (!ft_strncmp(mini->argv[0], "echo", 5))
-	{
-		ft_echo(mini->argc, mini->argv);
-		exit(0);
-	}
-	else
-	{
-		if (mini->argv[0][0] != '.')
-			path = search_path(envp, mini->argv[0]);
-		else
-			path = mini->argv[0];
-		if (execve(path, mini->argv, envp))
-		{
-			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-			ft_putstr_fd(mini->argv[0], 2);
-			ft_putstr_fd(": command not found\n", 2);
-			exit(0);
-		}
-	}
+	pathes = ft_split(sub_path + 5, ':');
+	return (search_path2(pathes, cmd));
 }
 
 int	minisize(t_mini	*mini)
@@ -260,13 +224,17 @@ void	print_mini(t_mini *mini)
 {
 	int	i;
 	t_redir	*temp;
+	t_argv	*temp2;
 
 	i = 0;
 	if (mini->argv)
 	{
-		while (mini->argv[i])
+		printf("%i ", mini->argc);
+		temp2 = mini->argv;
+		while (temp2)
 		{
-			printf("%s ", mini->argv[i]);
+			printf("%i %s ", i, temp2->arg);
+			temp2 = temp2->next;
 			i++;
 		}
 	}
@@ -389,7 +357,7 @@ void	redir_read(t_mini *mini, int **fds, int n, int size)
 		dup2(fds[n - 1][0], 0);
 }
 
-void	ft_pipe(t_mini *mini, int **fds, int n, int size, char **envp)
+void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 {
 	int		i;
 	char	*path;
@@ -403,26 +371,86 @@ void	ft_pipe(t_mini *mini, int **fds, int n, int size, char **envp)
 		close(fds[i][1]);
 		i++;
 	}
-	if (!ft_strncmp(mini->argv[0], "echo", 5))
+	if (!ft_strncmp(mini->argv->arg, "echo", 5))
 	{
-		ft_echo(mini->argc, mini->argv);
+		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
 		exit(0);
 	}
 	else
 	{
-		if (mini->argv[0][0] != '.')
-			path = search_path(envp, mini->argv[0]);
+		if (mini->argv->arg[0] != '.')
+			path = search_path(mini->env, mini->argv->arg);
 		else
-			path = mini->argv[0];
-		
-		if (execve(path, mini->argv, envp))
+			path = mini->argv->arg;
+		if (execve(path, argv_to_arr(mini->argv, mini->argc), envp_to_arr(mini->env)))
 		{
-			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-			ft_putstr_fd(mini->argv[0], 2);
-			ft_putstr_fd(": command not found\n", 2);
-			exit(0);
+			printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m"
+				"%s : command not found\n", mini->argv->arg);
+			exit(127);
 		}
 	}
+}
+
+void	free_env(t_env *env)
+{
+	t_env	*temp;
+
+	while (env)
+	{
+		free(env->key);
+		free(env->content);
+		temp = env->next;
+		free(env);
+		env = temp;
+	}
+}
+
+void	free_redir(t_redir *redir)
+{
+	t_redir	*temp;
+
+	while(redir)
+	{
+		free(redir->filename);
+		temp = redir->next;
+		free(redir);
+		redir = temp;
+	}
+}
+
+void	free_argv(t_argv *argv)
+{
+	t_argv	*temp;
+
+	while(argv)
+	{
+		free(argv->arg);
+		temp = argv->next;
+		free(argv);
+		argv = temp;
+	}
+}
+
+void	free_all(t_mini *mini, int ***fd, pid_t *pid)
+{
+	t_mini	*temp;
+	int		i;
+
+	while (mini)
+	{
+		i = 0;
+		free_argv(mini->argv);
+		free_redir(mini->read_redir);
+		free(mini->write_file);
+		temp = mini->next;
+		free(mini);
+		mini = temp;
+	}
+	i = 0;
+	while (fd[i])
+		free((*fd)[i++]);
+	free(pid);
+	free(*fd);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -442,7 +470,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
-		if (ft_strncmp(line, "", 1))
+		if (line[0] != '\0')
 		{
 			add_history(line);
 			mini = new_mini(env);
@@ -455,10 +483,17 @@ int	main(int argc, char **argv, char **envp)
 			pid = malloc(sizeof(pid_t) * size);
 			i = 0;
 			fd = malloc(sizeof(int *) * size);
+			// while (1)
+			// ;	
 			while (i < size)
 				fd[i++] = malloc(sizeof(int) * 2);
 			fd[i] = NULL;
 			i = 0;
+			// while (temp)
+			// {
+			// 	print_mini(temp);
+			// 	temp = temp->next;
+			// }
 			while (i < size)
 				pipe(fd[i++]);
 			i = 0;
@@ -466,30 +501,21 @@ int	main(int argc, char **argv, char **envp)
 			{
 				pid[i] = fork();
 				if (!pid[i])
-					ft_pipe(temp, fd, i, size, envp);
+					ft_pipe(temp, fd, i, size);
 				temp = temp->next;
 				i++;
 			}
-			// while (temp)
-			// {
-			// 	print_mini(temp);
-			// 	temp = temp->next;
-			// }
-			// if (!pid)
-			// 	run_program(mini, envp);
-			// i = 0;
-			// while (i < size)
-			// {
-			// 	waitpid(-1, &status, 0);
-			// 	i++;
-			// }
 			i = 0;
 			while (i < size)
 			{
-				waitpid(0, &status, 0);
+				close(fd[i][0]);
+				close(fd[i][1]);
 				i++;
-			// 	ft_putendl_fd("puk-puk", 1);
 			}
+			while (i--)
+				waitpid(-1, &g_status, 0); 
+			g_status /= 256;
+			free_all(mini, &fd, pid);
 		}
 		free(line);
 	}

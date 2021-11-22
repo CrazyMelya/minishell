@@ -17,7 +17,7 @@ OBJS 	= $(SRCS:%.c=%.o)
 
 $(NAME): $(OBJS) $(HEAD)
 	@make -C ./libft bonus
-	@$(CC) ./libft/libft.a -lreadline $(OBJS) -o $(NAME)
+	@$(CC) ./libft/libft.a -lreadline -L/Users/cliza/.brew/opt/readline/lib -I/Users/cliza/.brew/opt/readline/include $(OBJS) -o $(NAME)
 
 all: $(NAME)
 

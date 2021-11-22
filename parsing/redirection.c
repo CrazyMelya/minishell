@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/10 19:17:52 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/15 17:26:13 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	read_redir(t_mini *mini, char **line)
 	}
 	while (**line == ' ')
 		(*line)++;
-	while (**line != ' ' && **line)
+	while (**line != ' ' && **line && **line != '|')
 	{
 		filename = ft_chrjoin(filename, **line);
 		(*line)++;
@@ -106,7 +106,7 @@ int	write_redir(t_mini *mini, char **line)
 		type = 0;
 	while (**line == ' ')
 		(*line)++;
-	while (**line != ' ' && **line)
+	while (**line != ' ' && **line && **line != '|')
 	{
 		filename = ft_chrjoin(filename, **line);
 		(*line)++;

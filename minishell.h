@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/11 20:34:19 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/22 14:59:38 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #define SPEC3 "<>\'\" |"
 #define SYNT_ERR "bash: syntax error near unexpected token"
 
+int g_status;
+
 typedef struct s_env
 {
 	char			*key;
@@ -40,11 +42,17 @@ typedef struct s_redir
 	
 } 				t_redir;
 
+typedef struct s_argv
+{
+	char			*arg;
+	struct s_argv	*next;
+}				t_argv;
+
 
 typedef	struct s_mini
 {
 	int				argc;
-	char			**argv;
+	t_argv			*argv;
 	t_env			*env;
 	char			*write_file;
 	int				write_type;
@@ -59,10 +67,11 @@ int		write_redir(t_mini *mini, char **line);
 void	read_redir(t_mini *mini, char **line);
 char	*ft_chrjoin(char *str, char c);
 int		ft_parse(char *line, t_mini *mini);
-char	**add_arg(int argc, char **argv, char *arg);
+void	add_arg(t_argv **argv, char *arg);
 char	*search_key(char *key, t_env *env);
 t_mini	*new_mini(t_env *env);
-// int		here_doc(char *line);
 int		print_redir_error(char **line);
+void	free_arr(char ***arr);
+void	print_mini(t_mini *mini);
 
 #endif

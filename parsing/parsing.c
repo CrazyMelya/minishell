@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/11 19:21:40 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/22 15:00:56 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	parse_continue(t_mini **mini, char *arg, char **line)
 {
 	if (arg)
 	{
-		(*mini)->argv = add_arg((*mini)->argc, (*mini)->argv, arg);
+		add_arg(&(*mini)->argv, arg);
 		(*mini)->argc++;
 	}
 	if (**line == '>')
@@ -87,7 +87,6 @@ int	parse_continue(t_mini **mini, char *arg, char **line)
 		(*mini)->next = new_mini((*mini)->env);
 		*mini = (*mini)->next;
 	}
-	(*line)++;
 	return (0);
 }
 
