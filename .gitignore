@@ -4,3 +4,5 @@ kak
 *.o
 lo
 minishell
+libft/
+chek

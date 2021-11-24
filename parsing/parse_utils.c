@@ -6,34 +6,33 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 19:54:28 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/24 20:05:05 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**add_arg(int argc, char **argv, char *arg)
-{
-	char	**new_argv;
-	int		i;
 
-	if (!argc)
+
+void	add_arg(t_argv **argv, char	*arg)
+{
+	t_argv	*temp;
+
+	temp = *argv;
+	if (!(*argv))
 	{
-		new_argv = malloc(sizeof(char *) * 2);
-		new_argv[0] = arg;
-		new_argv[1] = NULL;
+		*argv = malloc(sizeof(t_argv));
+		(*argv)->arg = arg;
+		(*argv)->next = NULL;
 	}
 	else
 	{
-		new_argv = malloc(sizeof(char *) * (argc + 2));
-		i = -1;
-		while (++i < argc)
-			new_argv[i] = argv[i];
-		new_argv[i++] = arg;
-		new_argv[i] = NULL;
-		free(argv);
+		while (temp->next)
+			temp = temp->next;
+		temp->next = malloc(sizeof(t_argv));
+		temp->next->arg = arg;
+		temp->next->next = NULL;
 	}
-	return (new_argv);
 }
 
 char	*ft_chrjoin(char *str, char c)
@@ -61,6 +60,8 @@ char	*search_key(char *key, t_env *env)
 {
 	if (*key == '$')
 		return (ft_itoa(getpid()));
+	if (*key == '?')
+		return (ft_itoa(g_status));
 	while (env)
 	{
 		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
@@ -70,23 +71,24 @@ char	*search_key(char *key, t_env *env)
 	return (NULL);
 }
 
-int	here_doc(char *line)
+int	print_redir_error(char **line)
 {
-	while (*line && *line != '|')
+	if (**line == *(*line + 1))
+		(*line)++;
+	(*line)++;
+	while (**line == ' ')
+		(*line)++;
+	if (!(**line) || ft_strchr(SPEC2, **line))
 	{
-		if (*line == '\"')
-		{
-			while (*line != '\"' && *line)
-				line++;
-		}
-		if (*line == '\'')
-		{
-			while (*line != '\'' && *line)
-				line++;
-		}
-		if (*line == '<' && *(line + 1) == '<')
-			return (1);
-		line++;
+		if (*ft_strchr(SPEC2, **line) == '>' && *(*line + 1) == '>')
+			printf("%s `>>'\n", SYNT_ERR);
+		else if (*ft_strchr(SPEC2, **line) == '<' && *(*line + 1) == '<')
+			printf("%s `<<'\n", SYNT_ERR);
+		else if (!(**line))
+			printf("%s `newline'\n", SYNT_ERR);
+		else
+			printf("%s `%c'\n", SYNT_ERR, *ft_strchr(SPEC2, **line));
+		return (-1);
 	}
-	return (-1);
+	return (0);
 }

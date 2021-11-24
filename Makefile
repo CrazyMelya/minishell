@@ -26,6 +26,8 @@ OBJS 	= $(SRCS:%.c=%.o)
 
 $(NAME): $(OBJS) $(HEAD)
 	$(CC) -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib/ ./libft/libft.a  -lreadline $(OBJS) -o $(NAME)
+# @make -C ./libft bonus
+# @$(CC) ./libft/libft.a -lreadline -L/Users/cliza/.brew/opt/readline/lib -I/Users/cliza/.brew/opt/readline/include $(OBJS) -o $(NAME)
 
 all: $(NAME)
 

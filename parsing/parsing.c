@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/09 20:10:50 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/24 20:04:52 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,23 @@ int	parse_continue(t_mini **mini, char *arg, char **line)
 {
 	if (arg)
 	{
-		(*mini)->argv = add_arg((*mini)->argc, (*mini)->argv, arg);
+		add_arg(&(*mini)->argv, arg);
 		(*mini)->argc++;
 	}
 	if (**line == '>')
-		write_redir(*mini, line);
-	else if (**line == '<')
 	{
-		if (read_redir(*mini, line))
+		if (write_redir(*mini, line))
 			return (-1);
 	}
+	else if (**line == '<')
+		read_redir(*mini, line);
 	else if (**line == '|')
 	{
 		while (**line == '|')
 			(*line)++;
-		(*mini)->next = new_mini(*line, (*mini)->env);
+		(*mini)->next = new_mini((*mini)->env);
 		*mini = (*mini)->next;
 	}
-	(*line)++;
 	return (0);
 }
 
