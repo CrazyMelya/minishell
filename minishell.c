@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/22 15:13:11 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/23 20:56:27 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,8 +368,7 @@ void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 	while (i < size)
 	{
 		close(fds[i][0]);
-		close(fds[i][1]);
-		i++;
+		close(fds[i++][1]);
 	}
 	if (!ft_strncmp(mini->argv->arg, "echo", 5))
 	{
@@ -431,7 +430,7 @@ void	free_argv(t_argv *argv)
 	}
 }
 
-void	free_all(t_mini *mini, int ***fd, pid_t *pid)
+void	free_all(t_mini *mini, int **fd, pid_t *pid)
 {
 	t_mini	*temp;
 	int		i;
@@ -448,21 +447,69 @@ void	free_all(t_mini *mini, int ***fd, pid_t *pid)
 	}
 	i = 0;
 	while (fd[i])
-		free((*fd)[i++]);
+		free(fd[i++]);
 	free(pid);
-	free(*fd);
+	free(fd);
+}
+
+int	**fds_and_pipes_init(int size)
+{
+	int	i;
+	int	**fd;
+
+	fd = malloc(sizeof(int *) * (size + 1));
+	i = 0;
+	while (i < size)
+		fd[i++] = malloc(sizeof(int) * 2);
+	fd[i] = NULL;
+	i = 0;
+	while (i < size)
+		pipe(fd[i++]);
+	return (fd);
+}
+
+void	run_pipe(t_mini *mini, pid_t *pid, int **fd, int size)
+{
+	int		i;
+
+	i = 0;
+	while (i < size)
+	{
+		pid[i] = fork();
+		if (!pid[i])
+			ft_pipe(mini, fd, i, size);
+		mini = mini->next;
+		i++;
+	}
+	i = 0;
+	while (i < size)
+	{
+		close(fd[i][0]);
+		close(fd[i++][1]);
+	}
+}
+
+void	run(t_mini *mini)
+{
+	pid_t	*pid;
+	int		**fd;
+	int		size;
+
+	size = minisize(mini);
+	pid = malloc(sizeof(pid_t) * size);
+	fd = fds_and_pipes_init(size);
+	run_pipe(mini, pid, fd, size);
+	while (size--)
+		waitpid(-1, &g_status, 0); 
+	g_status /= 256;
+	free_all(mini, fd, pid);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_mini	*mini;
-	t_mini	*temp;
 	t_env	*env;
-	int		**fd;
-	pid_t	*pid;
-	int		size;
-	int		i;
 	
 	argc = 0;
 	argv = 0;
@@ -478,44 +525,7 @@ int	main(int argc, char **argv, char **envp)
 				continue;
 			if (ft_parse(line, mini))
 				continue;
-			temp = mini;
-			size = minisize(mini);
-			pid = malloc(sizeof(pid_t) * size);
-			i = 0;
-			fd = malloc(sizeof(int *) * size);
-			// while (1)
-			// ;	
-			while (i < size)
-				fd[i++] = malloc(sizeof(int) * 2);
-			fd[i] = NULL;
-			i = 0;
-			// while (temp)
-			// {
-			// 	print_mini(temp);
-			// 	temp = temp->next;
-			// }
-			while (i < size)
-				pipe(fd[i++]);
-			i = 0;
-			while (i < size)
-			{
-				pid[i] = fork();
-				if (!pid[i])
-					ft_pipe(temp, fd, i, size);
-				temp = temp->next;
-				i++;
-			}
-			i = 0;
-			while (i < size)
-			{
-				close(fd[i][0]);
-				close(fd[i][1]);
-				i++;
-			}
-			while (i--)
-				waitpid(-1, &g_status, 0); 
-			g_status /= 256;
-			free_all(mini, &fd, pid);
+			run(mini);
 		}
 		free(line);
 	}
