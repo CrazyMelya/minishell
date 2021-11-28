@@ -1,11 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/17 12:20:02 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/17 12:20:02 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-void	*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void		*kuda;
+	void	*result;
 
-	kuda = malloc(count * size);
-	if (kuda)
-		ft_memset(kuda, 0, count * size);
-	return (kuda);
+	result = malloc(nmemb * size);
+	if (result == NULL)
+		return (NULL);
+	ft_bzero(result, nmemb * size);
+	if (result == NULL)
+		return (NULL);
+	return (result);
 }

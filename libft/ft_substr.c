@@ -1,27 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/09 11:37:57 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/27 12:51:33 by cliza            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	i;
-	size_t	a;
-	char	*kuda;
+	char			*result;
+	unsigned int	i;
+	size_t			s_len;
 
 	if (!s)
-		return (0);
-	i = 0;
-	a = 0;
-	kuda = (char *)malloc(sizeof(*s) * (len + 1));
-	if (!kuda)
 		return (NULL);
-	while (s[i] != '\0')
+	s_len = ft_strlen(s);
+	if (start >= s_len)
 	{
-		if (i >= start && a < len)
-		{
-			kuda[a] = s[i];
-			a++;
-		}
-		i++;
+		result = malloc(1);
+		result[0] = 0;
+		return (result);
 	}
-	kuda[a] = '\0';
-	return (kuda);
+	if (s_len < len)
+		len = s_len;
+	result = (char *)malloc(len + 1);
+	if (result == NULL)
+		return (result);
+	i = 0;
+	while (i < len && start < s_len)
+		result[i++] = s[start++];
+	result[i] = 0;
+	return (result);
 }

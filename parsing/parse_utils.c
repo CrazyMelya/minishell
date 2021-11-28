@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/24 20:05:05 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/23 20:42:55 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*search_key(char *key, t_env *env)
 	while (env)
 	{
 		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
-			return(env->content);
+			return (env->content);
 		env = env->next;
 	}
 	return (NULL);

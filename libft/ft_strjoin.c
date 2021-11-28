@@ -1,22 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/09 12:35:10 by marvin            #+#    #+#             */
+/*   Updated: 2021/11/04 21:30:45 by cliza            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len;
-	int		i;
-	char	*kuda;
+	char			*result;
+	unsigned int	i;
+	unsigned int	j;
 
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	kuda = (char *)malloc(sizeof(char) * (len + 1));
-	if (!kuda)
+	if (!s2)
+		return (ft_strdup(s1));
+	if (!s1)
+		return (ft_strdup(s2));
+	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!result)
 		return (NULL);
-	while (*s1)
-		kuda[i++] = *s1++;
-	while (*s2)
-		kuda[i++] = *s2++;
-	kuda[i] = '\0';
-	return (kuda);
+	i = 0;
+	j = 0;
+	while (s1[i])
+	{
+		result[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+		result[i++] = s2[j++];
+	result[i] = 0;
+	return (result);
 }

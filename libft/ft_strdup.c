@@ -1,19 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/16 01:26:50 by marvin            #+#    #+#             */
+/*   Updated: 2021/06/09 15:38:35 by cliza            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-char	*ft_strdup(const char *src)
+char	*ft_strdup(const char *s)
 {
-	char	*kuda;
+	char	*result;
 	int		i;
 
-	kuda = malloc(ft_strlen(src) + 1);
-	if (!kuda)
+	if (!s)
+		return (NULL);
+	result = (char *)malloc(ft_strlen(s) + 1);
+	if (!result)
 		return (NULL);
 	i = 0;
-	while (src[i])
+	while (s[i])
 	{
-		kuda[i] = src[i];
+		result[i] = s[i];
 		i++;
 	}
-	kuda[i] = '\0';
-	return (kuda);
+	result[i] = 0;
+	return (result);
 }

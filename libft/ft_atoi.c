@@ -1,41 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/18 14:14:34 by cliza             #+#    #+#             */
+/*   Updated: 2021/04/26 14:05:13 by cliza            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-
-int	prov(const char *str)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
-		str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
-		i++;
-	return (i);
-}
 
 int	ft_atoi(const char *str)
 {
-	int				res;
-	int				sign;
-	unsigned int	i;
+	unsigned long	n;
+	int				s;
 
-	res = 0;
-	sign = 1;
-	i = prov(str);
-	if (str[i] == '-' || str[i] == '+')
+	n = 0;
+	s = 1;
+	while (*str == ' ' || (*str > 8 && *str < 14))
+		str++;
+	if (*str == '+' || *str == '-')
 	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
+		if (*str == '-')
+			s *= -1;
+		str++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (*str >= '0' && *str <= '9')
 	{
-		if (sign == -1 && ((res == 214748364 && str[i] - '0' > 8) || \
-			res > 214748364))
-			return (0);
-		if (sign == 1 && ((res == 214748364 && str[i] - '0' > 7) || \
-			res > 214748364))
+		n = n * 10 + *str - 48;
+		if (n > INT64_MAX && s == 1)
 			return (-1);
-		res = res * 10 + str[i] - '0';
-		i++;
+		if (n >= INT64_MAX && s == -1)
+			return (0);
+		str++;
 	}
-	return (res * sign);
+	return (n * s);
 }

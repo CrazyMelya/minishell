@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/24 20:05:46 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/28 18:21:36 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,19 +70,26 @@ char	*ft_chrjoin(char *str, char c);
 int		ft_parse(char *line, t_mini *mini);
 void	add_arg(t_argv **argv, char *arg);
 char	*search_key(char *key, t_env *env);
-t_mini	*new_mini(char *line, t_env *env);
-int		here_doc(char *line);
+// t_mini	*new_mini(char *line, t_env *env);
+// int		here_doc(char *line);
 void	ft_putstr_fd(char *s, int fd);
 t_env *find_on_head(t_env *env, char *head);
 void show_sorted_env(t_env *envr);
 void print_pwd_and_old_pwd(t_env *envr);
 void ft_unset(char *unset, t_env **envr);
-int ft_export(t_env *export, t_env **envr, int flag);
+
+int ft_export(t_env **envr, char *flag);
 t_env	*envp_to_list(char **envp);
 void paste_env(t_env *export, t_env **envr);
 t_mini	*new_mini(t_env *env);
 int		print_redir_error(char **line);
 void	free_arr(char ***arr);
 void	print_mini(t_mini *mini);
+char	*ft_strjoin_env(char const *s1, char const *s2);
 
+int	ft_strcmp(char *s1, char *s2);
+int ft_cd(char *path, t_env *env);
+int ft_pwd(t_env *env);
+void listprint(t_env *env);
+int ft_env(t_env *env);
 #endif

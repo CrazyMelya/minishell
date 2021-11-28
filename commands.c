@@ -53,10 +53,12 @@ void listprint(t_env *env)
 {
 	while (env->next != NULL)
 	{
-		printf("%s %s\n", env->key, env->content);
+		if (env->content != NULL)
+			printf("%s=%s\n", env->key, env->content);
 		env = env->next;
 	}	
-	printf("%s %s\n", env->key, env->content);
+	if (env->content != NULL)
+		printf("%s=%s\n", env->key, env->content);
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -115,7 +117,7 @@ void paste_env(t_env *export, t_env **envr)
 	*envr = first_el;
 }
 
-int	detect_len_of_stack(t_env *stack)
+static int	detect_len_of_stack(t_env *stack)
 {
 	int	i;
 
@@ -129,7 +131,6 @@ int	detect_len_of_stack(t_env *stack)
 		i++;
 		stack = stack-> next;
 	}
-	printf("hello world\n");
 	return (i + 1);
 }
 
@@ -152,6 +153,8 @@ char *find_the_min(t_env *envr,int from, int i)
 {
 	char *the_word_of_min = NULL;
 	int flag = 2;
+	// printf("FOUND YO!\n");
+	// sleep(4);
 	while (envr->next != NULL)
 	{
 		// printf("-----%d--%s--\n" ,envr->flag, envr->key);
@@ -166,10 +169,10 @@ char *find_the_min(t_env *envr,int from, int i)
 			}
 			// printf("  &&&&&&%d %d %s %d %d&&&&&\n",sum_of_lett(envr->key, i), i, envr->key, from , flag);
 			// sleep(3);
-			if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
-			{
-				return(NULL);
-			}
+			// if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
+			// {
+			// 	return(NULL);
+			// }
 			envr = envr->next;
 		}
 	}
@@ -215,16 +218,18 @@ void show_sorted_env(t_env *envr)
 	int len_of_the_stack = detect_len_of_stack(envr);
 	int i = 0;
 	from = (int)envr->key[0];
-	printf("%d\n", len_of_the_stack);
+	printf("%i %d\n", from ,len_of_the_stack);
 	while(len_of_the_stack)
 	{
+		
 		while((the_min_word =  find_the_min(envr,from, i)) == NULL)
 		{
 
-			// printf("***********%s********\n", the_min_word);
+			printf("***********%s********\n", the_min_word);
 			i++;
 			from = from + (int)envr->key[i];
 		}
+		// printf("как влаоптавыщадоуцваёт\n");
 		// printf("%d\n", len_of_the_stack);
 		i++;
 		from = from + (int)envr->key[i];
@@ -232,7 +237,11 @@ void show_sorted_env(t_env *envr)
 
 		t_env *the_el = find_on_head(envr, the_min_word);
 		(*the_el).flag = 1;
-		printf("%s %s\n", the_el->key, the_el->content);
+		
+		if (the_el->content)
+			printf("declare -x %s=\"%s\"\n", the_el->key, the_el->content);
+		else
+			printf("declare -x %s\n", the_el->key);
 		len_of_the_stack--;
 	}
 	back_flags(envr);
@@ -284,27 +293,27 @@ void ft_unset(char *unset, t_env **envr)
 	pre->next = after;
 }
 
-char	*ft_strjoin_env(char const *s1, char const *s2)
-{
-	size_t	len;
-	int		i;
-	char	*kuda;
+// char	*ft_strjoin_env(char const *s1, char const *s2)
+// {
+// 	size_t	len;
+// 	int		i;
+// 	char	*kuda;
 
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	kuda = (char *)malloc(sizeof(char) * (len + 2));
-	if (!kuda)
-		return (NULL);
-	while (*s1)
-		kuda[i++] = *s1++;
-	kuda[i++] = '=';
-	while (*s2)
-		kuda[i++] = *s2++;
-	kuda[i] = '\0';
-	return (kuda);
-}
+// 	i = 0;
+// 	if (!s1 || !s2)
+// 		return (0);
+// 	len = ft_strlen(s1) + ft_strlen(s2);
+// 	kuda = (char *)malloc(sizeof(char) * (len + 2));
+// 	if (!kuda)
+// 		return (NULL);
+// 	while (*s1)
+// 		kuda[i++] = *s1++;
+// 	kuda[i++] = '=';
+// 	while (*s2)
+// 		kuda[i++] = *s2++;
+// 	kuda[i] = '\0';
+// 	return (kuda);
+// }
 
 
 char **from_list_to_massive(t_env *envr)

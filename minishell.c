@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/24 20:06:21 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/11/28 18:28:24 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,7 @@ void	redir_write(t_mini *mini, int **fds, int n, int size)
 		{
 			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
 			ft_putstr_fd(mini->write_file, 2);
-			ft_putstr_fd(": no such file or directory\n", 2);
+			ft_putstr_fd(": no such file or directory!\n", 2);
 			exit(0);
 		}
 		dup2(fd, 1);
@@ -357,6 +357,40 @@ void	redir_read(t_mini *mini, int **fds, int n, int size)
 		dup2(fds[n - 1][0], 0);
 }
 
+int our_commands(t_mini *mini)
+{
+	if (!ft_strncmp(mini->argv->arg, "echo", 5))
+	{
+		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
+		exit(0);
+	}
+	else if (!ft_strncmp(mini->argv->arg, "cd", 5))
+	{
+		ft_cd(argv_to_arr(mini->argv, mini->argc)[1], mini->env);
+		// exit(0);
+		return(0);
+	}	
+	else if (!ft_strncmp(mini->argv->arg, "pwd", 5))
+	{
+		ft_pwd( mini->env);
+		return(0);
+	}	
+	else if (!ft_strncmp(mini->argv->arg, "env", 5))
+	{
+		ft_env(mini->env);
+		return(0);
+	}	
+	else if (!ft_strncmp(mini->argv->arg, "export", 5))
+	{
+		printf("here!!!\n");
+		ft_export(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
+		return(0);
+	}	
+	
+	return(1);
+}
+
+
 void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 {
 	int		i;
@@ -370,12 +404,12 @@ void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 		close(fds[i][0]);
 		close(fds[i++][1]);
 	}
-	if (!ft_strncmp(mini->argv->arg, "echo", 5))
-	{
-		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
-		exit(0);
-	}
-	else
+	// if (!ft_strncmp(mini->argv->arg, "echo", 5))
+	// {
+	// 	ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
+	// 	exit(0);
+	// }
+	if (our_commands(mini))
 	{
 		if (mini->argv->arg[0] != '.')
 			path = search_path(mini->env, mini->argv->arg);
@@ -505,44 +539,6 @@ void	run(t_mini *mini)
 	free_all(mini, fd, pid);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char	*line;
-// 	t_mini	*mini;
-// 	t_mini	*temp;
-// 	t_env	*env;
-// 	//pid_t	pid;
-// 	int		i;
-	
-// 	argc = 0;
-// 	argv = 0;
-// 	env = envp_to_list(envp);
-// 	while (1)
-// 	{
-// 		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
-// 		add_history(line);
-// 		if (ft_strncmp(line, "", 1))
-// 		{
-// 			mini = new_mini(line, env);
-// 			if (check_line(line))
-// 				continue;
-// 			if (ft_parse(line, mini))
-// 				continue;
-// 			//pid = fork();
-// 			i = 0;
-// 			temp = mini;
-// 			while (temp)
-// 			{
-// 				print_mini(temp);
-// 				temp = temp->next;
-// 			}
-// 			//if (!pid)
-// 			//	run_program(mini, envp);
-// 			wait(0);
-// 		}
-// 		free(line);
-// 	}
-// }
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;

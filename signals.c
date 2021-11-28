@@ -26,32 +26,32 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <fcntl.h>
-// #include "minishell.h"
+#include "minishell.h"
 #define STDERR 2
 #define SUCCESS 0
 
 
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
+// void	ft_putstr_fd(char *s, int fd)
+// {
+// 	int	i;
 
-	i = 0;
-	if (s == NULL)
-		return ;
-	while (s[i] != '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
-}
+// 	i = 0;
+// 	if (s == NULL)
+// 		return ;
+// 	while (s[i] != '\0')
+// 	{
+// 		write(fd, &s[i], 1);
+// 		i++;
+// 	}
+// }
 
-int ft_echo(char *str, int flag, int fd)
-{
-	ft_putstr_fd(str, fd);
-	if (flag)
-		ft_putstr_fd("\n", fd);
-	return(SUCCESS);
-}
+// int ft_echo(char *str, int flag, int fd)
+// {
+// 	ft_putstr_fd(str, fd);
+// 	if (flag)
+// 		ft_putstr_fd("\n", fd);
+// 	return(SUCCESS);
+// }
 
 // "/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)""
 
@@ -119,22 +119,22 @@ void myint3()
 
 
 
-int main(int argc, char **argv, char **env)
-{
+// int main(int argc, char **argv, char **env)
+// {
 
-	char	*str;
+// 	char	*str;
 
-	signal(2, myint);
-	signal(3, myint2);
-	rl_catch_signals = 0;
-	while(1)
-	{
-	str = readline("bash$ ");
-	ft_echo( str, 0, 1);
-	if (str == '\0')
-		myint3();
-	}
-	// printf("|||%s|||\n", str);
-}
+// 	signal(2, myint);
+// 	signal(3, myint2);
+// 	rl_catch_signals = 0;
+// 	while(1)
+// 	{
+// 	str = readline("bash$ ");
+// 	// ft_echo( str, 0, 1);
+// 	if (str == '\0')
+// 		myint3();
+// 	}
+// 	// printf("|||%s|||\n", str);
+// }
 
 // gcc -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib/  -lreadline signals.c

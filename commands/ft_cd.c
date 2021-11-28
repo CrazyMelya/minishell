@@ -21,7 +21,7 @@ t_env *find_on_head(t_env *env, char *head)
 
 
 
-char *ft_pwd()
+char *ft_pwd_in()
 {
 	char *dir;
 	dir = malloc(1024);
@@ -49,6 +49,9 @@ int do_oldpwd(t_env *env)
 }
 
 
+
+
+
 int ft_cd(char *path, t_env *env)
 {
 	// функция меняет путь pwd и oldpwd
@@ -58,14 +61,16 @@ int ft_cd(char *path, t_env *env)
 	// замена настоящего на предстоящий
 
 	// 1) просто путь
+
+
+
 	int r = chdir(path);
-	char *full_path = ft_pwd();
+	char *full_path = ft_pwd_in();
 	if (path == NULL)
 	{
 		
 	}
 	do_oldpwd(env);
-	
 	do_pwd(full_path, env);
 	return(SUCCESS);
 }

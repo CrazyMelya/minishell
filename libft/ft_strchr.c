@@ -1,21 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/16 13:15:30 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/16 13:15:30 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {
-	int		i;
-	char	d;
+	int	i;
+	int	len;
 
-	d = (char )c;
 	i = 0;
-	if (d == '\0')
-		return ((char *)&s[ft_strlen(s)]);
-	while (1)
+	len = ft_strlen(s) + 1;
+	while (i < len)
 	{
-		if (s[i] == d)
+		if (s[i] == (char)c)
 			return ((char *)&s[i]);
 		i++;
-		if (s[i] == '\0')
-			break ;
 	}
 	return (NULL);
 }

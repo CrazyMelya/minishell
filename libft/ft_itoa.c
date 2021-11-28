@@ -1,59 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/13 20:00:00 by marvin            #+#    #+#             */
+/*   Updated: 2021/04/27 11:42:36 by cliza            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int	count_sym(long int nb)
+static	int	length(int n)
 {
-	int		counter;
+	int	len;
 
-	counter = 0;
-	if (nb < 0)
-	{
-		counter++;
-		nb *= -1;
-	}
-	if (nb == 0)
+	if (n == 0)
 		return (1);
-	while (nb >= 1)
+	len = 0;
+	if (n < 0)
+		len++;
+	while (n)
 	{
-		counter++;
-		nb /= 10;
+		n /= 10;
+		len++;
 	}
-	return (counter);
-}
-
-static char	*perform(long int nb, int len, char *memory)
-{
-	int	i;
-
-	i = 0;
-	if (nb < 0)
-	{
-		i++;
-		nb *= -1;
-	}
-	memory[len] = '\0';
-	while (--len)
-	{
-		memory[len] = (nb % 10) + '0';
-		nb /= 10;
-	}
-	if (i != 0)
-		memory[0] = '-';
-	else
-		memory[0] = (nb % 10) + '0';
-	return (memory);
+	return (len);
 }
 
 char	*ft_itoa(int n)
 {
-	int			my_len;
-	long int	num;
-	char		*place;
+	int		len;
+	char	*result;
 
-	num = (long int)n;
-	my_len = count_sym(num);
-	place = (char *)malloc(sizeof(char) * (my_len + 1));
-	if (!place)
-		return (0);
-	place = perform(num, my_len, place);
-	return (place);
+	len = length(n);
+	result = (char *) malloc(len + 1);
+	if (result == NULL)
+		return (NULL);
+	if (!n)
+		result[0] = '0';
+	if (n < 0)
+		result[0] = '-';
+	result[len] = 0;
+	while (n)
+	{
+		len--;
+		if (n > 0)
+			result[len] = n % 10 + '0';
+		else
+			result[len] = '0' - n % 10;
+		n /= 10;
+	}
+	return (result);
 }
