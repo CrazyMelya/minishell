@@ -18,8 +18,6 @@
 // ◦ env with no options or arguments - 
 // ◦ exit with no options
 
-// #include <readline/readline.h>
-// #include <readline/history.h>
 #include "readline/readline.h"
 #include "readline/history.h"
 #include <stdio.h>
@@ -75,24 +73,7 @@ int	ft_strcmp(char *s1, char *s2)
 
 
 
-t_env *finde_pre_on_head(t_env *env, char *head)
-{
 
-	while (env->next != NULL)
-	{
-		// printf("-[[[[[[]]]]]] %s\n", env->key);
-		if (ft_strcmp(env->next->key, head) == 0)
-		{
-			// printf("-[[[[[[%s]]]]]] \n", env->key);
-			return(env);
-		}
-		// printf("+ %s\n", env->key);
-		env = env->next;
-		// printf("- %s\n", env->key);
-	}
-	printf("NO WAY %s\n", head);
-	return(NULL);
-}
 
 
 
@@ -297,48 +278,48 @@ void show_sorted_env(t_env *envr)
 
 
 
-t_env	*insert_into_stack()
-{
-	t_env	*stack;
-	t_env	*stack1;
-	t_env	*first_el_of_stack;
-	int		i;
-	int		pos_index;
+// t_env	*insert_into_stack()
+// {
+// 	t_env	*stack;
+// 	t_env	*stack1;
+// 	t_env	*first_el_of_stack;
+// 	int		i;
+// 	int		pos_index;
 
-	pos_index = 0;
-	stack = (t_env *)malloc(sizeof(t_env));
-	stack1 = (t_env *)malloc(sizeof(t_env));
-	stack->key = "PWD";
-	stack->flag = 0;
-	stack-> content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
-	first_el_of_stack = stack;
-	stack1->key = "OLDPWD";
-	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
-	stack1->next  = NULL;
-	stack1->flag  = 0;
-	stack->next = stack1;
+// 	pos_index = 0;
+// 	stack = (t_env *)malloc(sizeof(t_env));
+// 	stack1 = (t_env *)malloc(sizeof(t_env));
+// 	stack->key = "PWD";
+// 	stack->flag = 0;
+// 	stack-> content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
+// 	first_el_of_stack = stack;
+// 	stack1->key = "OLDPWD";
+// 	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
+// 	stack1->next  = NULL;
+// 	stack1->flag  = 0;
+// 	stack->next = stack1;
 
-	return (first_el_of_stack);
-}
+// 	return (first_el_of_stack);
+// }
 
 
 
-void print_pwd_and_old_pwd(t_env *envr)
-{
-	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
-	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
+// void print_pwd_and_old_pwd(t_env *envr)
+// {
+// 	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
+// 	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
 
-}
+// }
 
-void ft_unset( t_env **envr, char *unset)
-{
-	// printf("MY ENV!!!\n");
-	// show_env(*envr);
-	// printf("\nMY ENV!!!\n");
-	t_env *after = (find_on_head(*envr, unset))->next;//доделать!!!!!!
-	t_env *pre = finde_pre_on_head(*envr, unset);
-	pre->next = after;
-}
+// void ft_unset( t_env **envr, char *unset)
+// {
+// 	// printf("MY ENV!!!\n");
+// 	// show_env(*envr);
+// 	// printf("\nMY ENV!!!\n");
+// 	t_env *after = (find_on_head(*envr, unset))->next;//доделать!!!!!!
+// 	t_env *pre = finde_pre_on_head(*envr, unset);
+// 	pre->next = after;
+// }
 
 // char	*ft_strjoin_env(char const *s1, char const *s2)
 // {

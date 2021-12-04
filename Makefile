@@ -27,8 +27,8 @@ OBJS 	= $(SRCS:%.c=%.o)
 
 $(NAME): $(OBJS) $(HEAD)
 	@make -C ./libft bonus
-	@$(CC) ./libft/libft.a -lreadline -L/Users/vbackyet/.brew/opt/readline/lib -I/Users/vbackyet/.brew/opt/readline/include $(OBJS) -o $(NAME)
-
+	gcc ./libft/libft.a -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib/  -lreadline $(OBJS) -o $(NAME)
+# @$(CC) ./libft/libft.a -lreadline -L/Users/vbackyet/.brew/opt/readline/lib -I/Users/vbackyet/.brew/opt/readline/include $(OBJS) -o $(NAME)
 all: $(NAME)
 
 clean:

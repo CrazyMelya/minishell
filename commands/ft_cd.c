@@ -66,11 +66,13 @@ int ft_cd(char *path, t_env *env)
 
 	int r = chdir(path);
 	char *full_path = ft_pwd_in();
+	// printf("%s %d\n", path, r);
 	if (path == NULL)
 	{
-		
+		// printf("NULLLL\n");
 	}
 	do_oldpwd(env);
 	do_pwd(full_path, env);
+	free(full_path);
 	return(SUCCESS);
 }

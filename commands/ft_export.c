@@ -37,7 +37,7 @@ int ft_export(t_env **envr, char *flag)
 	show_sorted_env(*envr);
 
 	// sort_env(envr);
-	
+	free(export2);
 	return(0);
 	}
 }
