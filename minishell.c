@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/28 18:28:24 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/12/04 17:33:22 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,6 +357,11 @@ void	redir_read(t_mini *mini, int **fds, int n, int size)
 		dup2(fds[n - 1][0], 0);
 }
 
+
+
+// ◦ env with no options or arguments
+// ◦ exit with no options
+
 int our_commands(t_mini *mini)
 {
 	if (!ft_strncmp(mini->argv->arg, "echo", 5))
@@ -382,11 +387,24 @@ int our_commands(t_mini *mini)
 	}	
 	else if (!ft_strncmp(mini->argv->arg, "export", 5))
 	{
-		printf("here!!!\n");
 		ft_export(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
 		return(0);
 	}	
-	
+	else if (!ft_strncmp(mini->argv->arg, "unset", 5))
+	{
+		ft_unset(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
+		return(0);
+	}	
+	else if (!ft_strncmp(mini->argv->arg, "env", 5))
+	{
+		ft_env(mini->env);
+		return(0);
+	}	
+	else if (!ft_strncmp(mini->argv->arg, "exit", 5))
+	{
+		ft_exit(mini, argv_to_arr(mini->argv, mini->argc));
+		return(0);
+	}	
 	return(1);
 }
 

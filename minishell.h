@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/28 18:21:36 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/12/04 17:08:19 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_argv
 typedef	struct s_mini
 {
 	int				argc;
+	int 			ret;
 	t_argv			*argv;
 	t_env			*env;
 	char			*write_file;
@@ -76,7 +77,7 @@ void	ft_putstr_fd(char *s, int fd);
 t_env *find_on_head(t_env *env, char *head);
 void show_sorted_env(t_env *envr);
 void print_pwd_and_old_pwd(t_env *envr);
-void ft_unset(char *unset, t_env **envr);
+void ft_unset( t_env **envr, char *unset);
 
 int ft_export(t_env **envr, char *flag);
 t_env	*envp_to_list(char **envp);
@@ -92,4 +93,5 @@ int ft_cd(char *path, t_env *env);
 int ft_pwd(t_env *env);
 void listprint(t_env *env);
 int ft_env(t_env *env);
+void	ft_exit(t_mini *mini, char **cmd);
 #endif

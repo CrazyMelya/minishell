@@ -23,8 +23,7 @@ int ft_export(t_env **envr, char *flag)
 		return(0);
 	}
 	else
-	{
-		
+	{		
 	t_env *first_el = *envr;
 	t_env *export2 = turn_char_to_leaf(flag);
 	// export2 = (t_env*)malloc(sizeof(t_env));
