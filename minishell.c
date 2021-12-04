@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/03 22:29:50 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/04 15:42:13 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,6 +400,37 @@ void	other_cmd(t_mini *mini)
 	}
 }
 
+int our_commands(t_mini *mini)
+{
+	if (!ft_strncmp(mini->argv->arg, "echo", 5))
+	{
+		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
+		exit(0);
+	}
+	else if (!ft_strncmp(mini->argv->arg, "cd", 3))
+	{
+		ft_cd(argv_to_arr(mini->argv, mini->argc)[1], mini->env);
+		exit(0);
+	}
+	else if (!ft_strncmp(mini->argv->arg, "pwd", 4))
+	{
+		ft_pwd( mini->env);
+		exit(0);
+	}
+	else if (!ft_strncmp(mini->argv->arg, "env", 4))
+	{
+		ft_env(mini->env);
+		exit(0);
+	}
+	else if (!ft_strncmp(mini->argv->arg, "export", 7))
+	{
+		printf("here!!!\n");
+		ft_export(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
+		exit(0);
+	}	
+	return(1);
+}
+
 void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 {
 	int		i;
@@ -412,12 +443,7 @@ void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 		close(fds[i][0]);
 		close(fds[i++][1]);
 	}
-	if (!ft_strncmp(mini->argv->arg, "echo", 5))
-	{
-		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
-		exit(0);
-	}
-	else
+	if (our_commands(mini))
 		other_cmd(mini);
 }
 

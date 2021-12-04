@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/03 23:31:22 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/04 15:36:41 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	check_file(t_mini *mini, char *filename)
 		fd = open(mini->write_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
 	{
-		printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m%s: Permission denied\n", mini->write_file);
+		printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m%s: "
+			"Permission denied\n", mini->write_file);
 		free(filename);
 		return (-1);
 	}

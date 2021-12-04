@@ -6,13 +6,11 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/29 23:04:53 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/04 15:08:50 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-
 
 void	add_arg(t_argv **argv, char	*arg)
 {
