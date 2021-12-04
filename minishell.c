@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/23 20:56:27 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/03 22:29:50 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@ char	**argv_to_arr(t_argv *argv, int	argc)
 	return(result);
 }
 
+void	free_arr(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	while ((*arr)[i])
+		free((*arr)[i++]);
+	free(*arr);
+}
+
 t_mini	*new_mini(t_env *env)
 {
 	t_mini *mini;
@@ -43,19 +53,6 @@ t_mini	*new_mini(t_env *env)
 	mini->read_redir = NULL;
 	mini->here_doc[0] = -1;
 	return (mini);
-}
-
-void	free_arr(char ***arr)
-{
-	int	i;
-
-	i = 0;
-	while ((*arr)[i])
-	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
 }
 
 t_env	*new_env(char *key, char *content)
@@ -129,7 +126,7 @@ int	detect_len_of_stack(t_env *env)
 	return (i);
 }
 
-char	*ft_strjoin_env(char const *s1, char const *s2)
+char	*ft_strjoin_env(char const *s1, char const *s2, char c)
 {
 	size_t	len;
 	int		i;
@@ -144,7 +141,7 @@ char	*ft_strjoin_env(char const *s1, char const *s2)
 		return (NULL);
 	while (*s1)
 		kuda[i++] = *s1++;
-	kuda[i++] = '=';
+	kuda[i++] = c;
 	while (*s2)
 		kuda[i++] = *s2++;
 	kuda[i] = '\0';
@@ -155,11 +152,11 @@ char **envp_to_arr(t_env *envr)
 {
 	int t = 0;
 	int i = detect_len_of_stack(envr);
-	char **env_in_list =malloc(i*sizeof(char *));
+	char **env_in_list = malloc(i * sizeof(char *));
 	while(t < i)
 	{
 		
-		env_in_list[t] = ft_strjoin_env(envr->key, envr->content);
+		env_in_list[t] = ft_strjoin_env(envr->key, envr->content, '=');
 		envr = envr->next;
 		t++;
 	}
@@ -170,15 +167,12 @@ char **envp_to_arr(t_env *envr)
 char	*search_path2(char **pathes, char *cmd)
 {
 	int		i;
-	char	*sub_path;
 	char	*path;
 
 	i = 0;
 	while (pathes[i])
 	{
-		sub_path = ft_strjoin(pathes[i], "/");
-		path = ft_strjoin(sub_path, cmd);
-		free(sub_path);
+		path = ft_strjoin_env(pathes[i], cmd, '/');
 		if (!access(path, X_OK))
 		{
 			free_arr(&pathes);
@@ -193,7 +187,6 @@ char	*search_path2(char **pathes, char *cmd)
 
 char	*search_path(t_env *env, char *cmd)
 {
-	char	**pathes;
 	char	*sub_path;
 
 	sub_path = NULL;
@@ -203,8 +196,7 @@ char	*search_path(t_env *env, char *cmd)
 			sub_path = env->content;
 		env = env->next;
 	}
-	pathes = ft_split(sub_path + 5, ':');
-	return (search_path2(pathes, cmd));
+	return (search_path2(ft_split(sub_path + 5, ':'), cmd));
 }
 
 int	minisize(t_mini	*mini)
@@ -273,8 +265,8 @@ void	redir_write(t_mini *mini, int **fds, int n, int size)
 		{
 			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
 			ft_putstr_fd(mini->write_file, 2);
-			ft_putstr_fd(": no such file or directory\n", 2);
-			exit(0);
+			ft_putstr_fd(": Permission denied\n", 2);
+			exit(1);
 		}
 		dup2(fd, 1);
 		close(fd);
@@ -315,19 +307,31 @@ void	read_file(t_mini *mini)
 	int		fd;
 
 	temp = mini->read_redir;
-	if (!temp->type)
+	while (temp)
 	{
-		fd = open(temp->filename, O_RDONLY);
-		if (fd == -1)
+		if (!temp->type)
 		{
-			ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-			ft_putstr_fd(temp->filename, 2);
-			ft_putstr_fd(": no such file or directory\n", 2);
-			exit(-1);
+			if (check_dir(temp->filename))
+				exit(1);
+			if (access(temp->filename, F_OK))
+			{
+				ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
+				ft_putstr_fd(temp->filename, 2);
+				ft_putstr_fd(": no such file or directory\n", 2);
+				exit(1);
+			}
+			if (access(temp->filename, R_OK))
+			{
+				ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
+				ft_putstr_fd(temp->filename, 2);
+				ft_putstr_fd(": Permission denied\n", 2);
+				exit(1);
+			}
+			fd = open(temp->filename, O_RDONLY);
+			close(fd);
 		}
-		close(fd);
+		temp = temp->next;
 	}
-	temp = temp->next;
 }
 
 void	redir_read(t_mini *mini, int **fds, int n, int size)
@@ -357,10 +361,48 @@ void	redir_read(t_mini *mini, int **fds, int n, int size)
 		dup2(fds[n - 1][0], 0);
 }
 
+int	check_dir(char *filename)
+{
+	void	*dir;
+	
+	dir = opendir(filename);
+	if (dir)
+	{
+		closedir(dir);
+		printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m %s: is a directory\n", filename);
+		return (-1);
+	}
+	else
+		return (0);
+}
+
+void	other_cmd(t_mini *mini)
+{
+	char	*path;
+
+	if (!ft_strchr(mini->argv->arg, '/'))
+	{
+		path = search_path(mini->env, mini->argv->arg);
+		if (!path)
+		{
+			printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m"
+				"%s: command not found\n", mini->argv->arg);
+			exit(127);
+		}
+	}
+	else
+		path = mini->argv->arg;
+	if (execve(path, argv_to_arr(mini->argv, mini->argc), envp_to_arr(mini->env)))
+	{
+		printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m"
+			"%s: No such file or directory\n", mini->argv->arg);
+		exit(127);
+	}
+}
+
 void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 {
 	int		i;
-	char	*path;
 
 	redir_read(mini, fds, n, size);
 	redir_write(mini, fds, n, size);
@@ -376,18 +418,7 @@ void	ft_pipe(t_mini *mini, int **fds, int n, int size)
 		exit(0);
 	}
 	else
-	{
-		if (mini->argv->arg[0] != '.')
-			path = search_path(mini->env, mini->argv->arg);
-		else
-			path = mini->argv->arg;
-		if (execve(path, argv_to_arr(mini->argv, mini->argc), envp_to_arr(mini->env)))
-		{
-			printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m"
-				"%s : command not found\n", mini->argv->arg);
-			exit(127);
-		}
-	}
+		other_cmd(mini);
 }
 
 void	free_env(t_env *env)
@@ -430,14 +461,12 @@ void	free_argv(t_argv *argv)
 	}
 }
 
-void	free_all(t_mini *mini, int **fd, pid_t *pid)
+void	free_mini(t_mini *mini)
 {
 	t_mini	*temp;
-	int		i;
-
+	
 	while (mini)
 	{
-		i = 0;
 		free_argv(mini->argv);
 		free_redir(mini->read_redir);
 		free(mini->write_file);
@@ -445,6 +474,13 @@ void	free_all(t_mini *mini, int **fd, pid_t *pid)
 		free(mini);
 		mini = temp;
 	}
+}
+
+void	free_all(t_mini *mini, int **fd, pid_t *pid)
+{
+	int		i;
+
+	free_mini(mini);
 	i = 0;
 	while (fd[i])
 		free(fd[i++]);
@@ -524,7 +560,11 @@ int	main(int argc, char **argv, char **envp)
 			if (check_line(line))
 				continue;
 			if (ft_parse(line, mini))
+			{
+				free_mini(mini);
+				g_status = 1;
 				continue;
+			}
 			run(mini);
 		}
 		free(line);

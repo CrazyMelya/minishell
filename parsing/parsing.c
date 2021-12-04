@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/23 20:42:39 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/29 23:06:09 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
 void	parse_dollar(t_mini *mini, char **line, char **arg)
 {
 	char	*key;
-	char	*temp;
 
 	key = NULL;
 	(*line)++;
+	if (**line == '\'' || **line == '\"')
+	{
+		quotes(mini, line, arg);
+		return ;
+	}
 	if (**line != '$' && **line != '?')
 	{
 		while (**line && !ft_strchr(SPEC, **line))
@@ -26,17 +30,14 @@ void	parse_dollar(t_mini *mini, char **line, char **arg)
 			key = ft_chrjoin(key, **line);
 			(*line)++;
 		}
+		*arg = ft_strjoin(*arg, search_key(&key, mini->env));
 	}
 	else
 	{
-		key = ft_strdup(*line);
-		(*line)++;
+		key = search_key(line, mini->env);
+		*arg = ft_chrjoin(*arg, *key);
 	}
-	temp = *arg;
-	*arg = ft_strjoin(*arg, search_key(key, mini->env));
-	free(temp);
 	free(key);
-	return ;
 }
 
 void	single_quotes(char **line, char **arg)
@@ -55,7 +56,7 @@ void	double_quotes(t_mini *mini, char **line, char **arg)
 	(*line)++;
 	while (**line != '\"' && **line)
 	{
-		if (**line == '$')
+		if (**line == '$' && (*line)[1] != '\"')
 			parse_dollar(mini, line, arg);
 		else
 		{
@@ -101,7 +102,7 @@ int	ft_parse(char *line, t_mini *mini)
 			line++;
 		while (!ft_strchr(SPEC2, *line) && *line)
 		{
-			if (*line == '$' && *(line + 1) && !ft_strchr(SPEC3, *(line + 1)))
+			if (*line == '$' && *(line + 1) && !ft_strchr(SPEC2, *(line + 1)))
 				parse_dollar(mini, &line, &arg);
 			else if (*line == '\'')
 				single_quotes(&line, &arg);

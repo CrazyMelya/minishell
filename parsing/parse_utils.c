@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:08:02 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/23 20:42:55 by cliza            ###   ########.fr       */
+/*   Updated: 2021/11/29 23:04:53 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,21 @@ char	*ft_chrjoin(char *str, char c)
 	return (new);
 }
 
-char	*search_key(char *key, t_env *env)
+char	*search_key(char **key, t_env *env)
 {
-	if (*key == '$')
+	if (**key == '$')
+	{
+		(*key)++;
 		return (ft_itoa(getpid()));
-	if (*key == '?')
+	}
+	if (**key == '?')
+	{
+		(*key)++;
 		return (ft_itoa(g_status));
+	}
 	while (env)
 	{
-		if (!ft_strncmp(key, env->key, ft_strlen(key) + 1))
+		if (!ft_strncmp(*key, env->key, ft_strlen(*key) + 1))
 			return (env->content);
 		env = env->next;
 	}
@@ -91,4 +97,12 @@ int	print_redir_error(char **line)
 		return (-1);
 	}
 	return (0);
+}
+
+void	quotes(t_mini *mini, char **line, char **arg)
+{
+	if (**line == '\'')
+		single_quotes(line, arg);
+	else
+		double_quotes(mini, line, arg);
 }

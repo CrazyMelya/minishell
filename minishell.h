@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/23 20:42:35 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/03 22:06:33 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <fcntl.h>
+#include <dirent.h>
 #define SPEC "<>$\'\" |"
 #define SPEC2 "<>| "
 #define SPEC3 "<>\'\" |"
@@ -68,10 +69,14 @@ void	read_redir(t_mini *mini, char **line);
 char	*ft_chrjoin(char *str, char c);
 int		ft_parse(char *line, t_mini *mini);
 void	add_arg(t_argv **argv, char *arg);
-char	*search_key(char *key, t_env *env);
+char	*search_key(char **key, t_env *env);
 t_mini	*new_mini(t_env *env);
 int		print_redir_error(char **line);
 void	free_arr(char ***arr);
 void	print_mini(t_mini *mini);
+void	single_quotes(char **line, char **arg);
+void	double_quotes(t_mini *mini, char **line, char **arg);
+void	quotes(t_mini *mini, char **line, char **arg);
+int		check_dir(char *filename);
 
 #endif

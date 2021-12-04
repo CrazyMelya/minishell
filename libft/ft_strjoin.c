@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 12:35:10 by marvin            #+#    #+#             */
-/*   Updated: 2021/11/04 21:30:45 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/02 19:27:44 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[j])
 		result[i++] = s2[j++];
 	result[i] = 0;
+	free((void *)s1);
 	return (result);
 }
