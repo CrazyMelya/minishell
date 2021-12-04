@@ -9,6 +9,7 @@ CC		=	gcc
 # SRCS	=	commands.c
 
 SRCS	=  	minishell.c \
+			free.c\
 			parsing/check_line.c\
 			parsing/redirection.c\
 			parsing/parsing.c\
@@ -27,7 +28,7 @@ OBJS 	= $(SRCS:%.c=%.o)
 
 $(NAME): $(OBJS) $(HEAD)
 	@make -C ./libft bonus
-	@$(CC) $(OBJS) -o $(NAME) -lreadline -L /Users/cliza/.brew/opt/readline/lib -I /Users/cliza/.brew/opt/readline/include ./libft/libft.a
+	@$(CC) ./libft/libft.a -lreadline  -I ~/.brew/opt/readline/include -L ~/.brew/opt/readline/lib/ $(OBJS) -o $(NAME)
 
 all: $(NAME)
 

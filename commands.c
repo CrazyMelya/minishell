@@ -18,8 +18,6 @@
 // ◦ env with no options or arguments - 
 // ◦ exit with no options
 
-// #include <readline/readline.h>
-// #include <readline/history.h>
 #include "readline/readline.h"
 #include "readline/history.h"
 #include <stdio.h>
@@ -75,24 +73,7 @@ int	ft_strcmp(char *s1, char *s2)
 
 
 
-t_env *finde_pre_on_head(t_env *env, char *head)
-{
 
-	while (env->next != NULL)
-	{
-		// printf("-[[[[[[]]]]]] %s\n", env->key);
-		if (ft_strcmp(env->next->key, head) == 0)
-		{
-			// printf("-[[[[[[%s]]]]]] \n", env->key);
-			return(env);
-		}
-		// printf("+ %s\n", env->key);
-		env = env->next;
-		// printf("- %s\n", env->key);
-	}
-	printf("NO WAY %s\n", head);
-	return(NULL);
-}
 
 
 
@@ -135,7 +116,7 @@ static int	detect_len_of_stack(t_env *stack)
 }
 
 
-int sum_of_lett(char *my_word, int to)
+int sum_of_lett(char *my_word, int to, int flag)
 {
 	int i = 0;
 	int sum = 0;
@@ -144,50 +125,74 @@ int sum_of_lett(char *my_word, int to)
 		sum+= (int)my_word[i];
 		i++;
 	}
+	if (flag == -1)
+		return(0);
 	return(sum);
 }
 
-
+void clean_the_stuff(t_env *beg,int from ,int i)
+{
+	while (beg != NULL)
+	{
+	if ((sum_of_lett(beg->key, i, beg->flag) > from) && (sum_of_lett(beg->key, i, beg->flag)!= 0))
+	{
+		if (beg->flag != 1)
+			beg->flag = -1;
+	}
+	beg = beg-> next;
+	}
+}
 
 char *find_the_min(t_env *envr,int from, int i)
 {
 	char *the_word_of_min = NULL;
-	int flag = 2;
+	int flag = 0;
 	// printf("FOUND YO!\n");
 	// sleep(4);
+	t_env *beg = envr;
+	// printf("%d %d - from-< i \n", i, from);
+
 	while (envr->next != NULL)
 	{
 		// printf("-----%d--%s--\n" ,envr->flag, envr->key);
-		if (envr->flag)
+		if (envr->flag == 1)
 			envr = envr->next;
-		else{
-			if (sum_of_lett(envr->key, i) <= from)
+		else
+		{
+			if ((sum_of_lett(envr->key, i, envr->flag) <= from) && (sum_of_lett(envr->key, i, envr->flag)!= 0))
 			{
+				if ((sum_of_lett(envr->key, i, envr->flag) == from))
+					flag = 1;
+				else
+					flag = 0;
 				the_word_of_min = envr->key;
-				from = sum_of_lett(envr->key, i);
-				flag--;
+				from = sum_of_lett(envr->key, i, envr->flag);
 			}
-			// printf("  &&&&&&%d %d %s %d %d&&&&&\n",sum_of_lett(envr->key, i), i, envr->key, from , flag);
+			else
+				envr->flag = -1;
+			// printf("  &&&&&&%d %d %s %d %d %d&&&&&\n",sum_of_lett(envr->key, i, envr->flag), i, envr->key, from , flag, envr->flag);
 			// sleep(3);
-			// if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
-			// {
-			// 	return(NULL);
-			// }
+
 			envr = envr->next;
 		}
 	}
 	// printf("-----%d--%s--\n" ,envr->flag, envr->key);
-	if (!(envr->flag))
+	if ((envr->flag) != 1)
 	{
 		
-		if (sum_of_lett(envr->key, i) <= from)
+		if ((sum_of_lett(envr->key, i, envr->flag) <= from) && (sum_of_lett(envr->key, i, envr->flag)!= 0))
 		{
+			if ((sum_of_lett(envr->key, i, envr->flag) == from))
+				flag = 1;
+			else 
+				flag = 0;
 			the_word_of_min = envr->key;
-			from = sum_of_lett(envr->key, i);
-			flag--;
+			from = sum_of_lett(envr->key, i, envr->flag);
+			// flag--;
 		}
-		if ((sum_of_lett(envr->key, i) == from) && (flag < 0))
-			return(NULL);
+		else
+			envr->flag = -1;
+
 		///
 		
 		if (the_word_of_min == NULL)
@@ -195,6 +200,10 @@ char *find_the_min(t_env *envr,int from, int i)
 		
 	}
 	// sleep(2);
+	// printf("{%d}\n", from);
+	clean_the_stuff(beg, from , i);
+	if (flag)
+		return(NULL);
 	return(the_word_of_min);
 }
 
@@ -210,39 +219,58 @@ void back_flags(t_env *env)
 env->flag = 0;
 }
 
+
+void half_back_flags(t_env *env)
+{
+	while (env->next != NULL)
+	{
+		if (env->flag == -1)
+			env->flag = 0;
+		env = env->next;
+		// printf("- %s\n", env->key);
+	}
+	if (env->flag == -1)
+			env->flag = 0;
+}
+
 void show_sorted_env(t_env *envr)
 {
 	int first_lett;
 	char *the_min_word;
 	int from;
 	int len_of_the_stack = detect_len_of_stack(envr);
-	int i = 0;
-	from = (int)envr->key[0];
-	printf("%i %d\n", from ,len_of_the_stack);
+	// int i = 0;
+	// from = (int)envr->key[i];
+	from = 100000;
 	while(len_of_the_stack)
 	{
-		
+		int i = 0;
 		while((the_min_word =  find_the_min(envr,from, i)) == NULL)
 		{
 
-			printf("***********%s********\n", the_min_word);
+			// printf("***********%s********\n", the_min_word);
 			i++;
-			from = from + (int)envr->key[i];
+			// from = from + (int)envr->key[i];
+			// from = sum_of_lett()
 		}
+		half_back_flags(envr);
+		// sleep(300);
+		// printf("***********%s********\n", the_min_word);
 		// printf("как влаоптавыщадоуцваёт\n");
 		// printf("%d\n", len_of_the_stack);
-		i++;
-		from = from + (int)envr->key[i];
+		// i++;
+		// from = from + (int)envr->key[i];
 		// printf("||%d %s||\n", from, the_min_word);
 
 		t_env *the_el = find_on_head(envr, the_min_word);
 		(*the_el).flag = 1;
-		
+		// printf("%d ", len_of_the_stack);
 		if (the_el->content)
 			printf("declare -x %s=\"%s\"\n", the_el->key, the_el->content);
 		else
 			printf("declare -x %s\n", the_el->key);
 		len_of_the_stack--;
+		// sleep(3);
 	}
 	back_flags(envr);
 
@@ -250,48 +278,48 @@ void show_sorted_env(t_env *envr)
 
 
 
-t_env	*insert_into_stack()
-{
-	t_env	*stack;
-	t_env	*stack1;
-	t_env	*first_el_of_stack;
-	int		i;
-	int		pos_index;
+// t_env	*insert_into_stack()
+// {
+// 	t_env	*stack;
+// 	t_env	*stack1;
+// 	t_env	*first_el_of_stack;
+// 	int		i;
+// 	int		pos_index;
 
-	pos_index = 0;
-	stack = (t_env *)malloc(sizeof(t_env));
-	stack1 = (t_env *)malloc(sizeof(t_env));
-	stack->key = "PWD";
-	stack->flag = 0;
-	stack-> content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
-	first_el_of_stack = stack;
-	stack1->key = "OLDPWD";
-	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
-	stack1->next  = NULL;
-	stack1->flag  = 0;
-	stack->next = stack1;
+// 	pos_index = 0;
+// 	stack = (t_env *)malloc(sizeof(t_env));
+// 	stack1 = (t_env *)malloc(sizeof(t_env));
+// 	stack->key = "PWD";
+// 	stack->flag = 0;
+// 	stack-> content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
+// 	first_el_of_stack = stack;
+// 	stack1->key = "OLDPWD";
+// 	stack1->content = "/Users/vbackyet/Desktop/moi_minishell/minishell";
+// 	stack1->next  = NULL;
+// 	stack1->flag  = 0;
+// 	stack->next = stack1;
 
-	return (first_el_of_stack);
-}
+// 	return (first_el_of_stack);
+// }
 
 
 
-void print_pwd_and_old_pwd(t_env *envr)
-{
-	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
-	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
+// void print_pwd_and_old_pwd(t_env *envr)
+// {
+// 	printf( "PWD : %s\n"  ,find_on_head(envr, "PWD")->content);
+// 	printf( "OLDPWD : %s\n"  ,find_on_head(envr, "OLDPWD")->content);
 
-}
+// }
 
-void ft_unset(char *unset, t_env **envr)
-{
-	// printf("MY ENV!!!\n");
-	// show_env(*envr);
-	// printf("\nMY ENV!!!\n");
-	t_env *after = (find_on_head(*envr, unset))->next;//доделать!!!!!!
-	t_env *pre = finde_pre_on_head(*envr, unset);
-	pre->next = after;
-}
+// void ft_unset( t_env **envr, char *unset)
+// {
+// 	// printf("MY ENV!!!\n");
+// 	// show_env(*envr);
+// 	// printf("\nMY ENV!!!\n");
+// 	t_env *after = (find_on_head(*envr, unset))->next;//доделать!!!!!!
+// 	t_env *pre = finde_pre_on_head(*envr, unset);
+// 	pre->next = after;
+// }
 
 // char	*ft_strjoin_env(char const *s1, char const *s2)
 // {

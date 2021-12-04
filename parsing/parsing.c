@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/11/29 23:06:09 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/04 19:58:50 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	parse_continue(t_mini **mini, char *arg, char **line)
 	{
 		while (**line == '|')
 			(*line)++;
-		(*mini)->next = new_mini((*mini)->env);
+		(*mini)->next = new_mini((*mini)->env, (*mini)->id + 1);
 		*mini = (*mini)->next;
 	}
 	return (0);
