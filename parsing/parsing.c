@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/04 19:58:50 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/06 16:20:44 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	parse_dollar(t_mini *mini, char **line, char **arg)
 	else
 	{
 		key = search_key(line, mini->env);
-		*arg = ft_chrjoin(*arg, *key);
+		*arg = ft_strjoin(*arg, key);
 	}
 	free(key);
 }

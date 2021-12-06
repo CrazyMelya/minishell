@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 14:40:27 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/06 16:22:32 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	other_cmd(t_mini *mini)
 		path = search_path(mini->env, mini->argv->arg);
 		if (!path)
 		{
-			print_error(": command not found", mini->argv->arg);
+			print_error(" : command not found", mini->argv->arg);
 			exit(127);
 		}
 	}
@@ -91,7 +91,7 @@ void	other_cmd(t_mini *mini)
 		path = mini->argv->arg;
 	if (execve(path, argv_to_arr(mini->argv, mini->argc), envp_arr(mini->env)))
 	{
-		print_error(": No such file or directory", mini->argv->arg);
+		print_error(" : No such file or directory", mini->argv->arg);
 		exit(127);
 	}
 }
@@ -111,6 +111,8 @@ int	ft_pipe(t_mini *mini, int **fds, int n, int size)
 		other_cmd(mini);
 	else if (n != -1)
 		exit(0);
+	else
+		g_status = 0;
 	return (0);
 }
 
@@ -159,6 +161,7 @@ void	run(t_mini *mini)
 	pid_t	*pid;
 	int		**fd;
 	int		size;
+	int		i;
 
 	size = minisize(mini);
 	if (mini->argv)
@@ -171,8 +174,9 @@ void	run(t_mini *mini)
 			fd = fds_and_pipes_init(size);
 			run_pipe(mini, pid, fd, size);
 		}
-		while (size--)
-			waitpid(-1, &g_status, 0);
+		i = 0;
+		while (i < size)
+			waitpid(pid[i++], &g_status, 0);
 		g_status /= 256;
 		free_fd_pid(fd, pid);
 	}
@@ -214,6 +218,5 @@ int	main(int argc, char **argv, char **envp)
 	argc = 0;
 	argv = 0;
 	env = envp_to_list(envp);
-	signal(SIGINT, myint);
 	return (body(env));
 }
