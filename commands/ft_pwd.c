@@ -2,6 +2,11 @@
 
 int ft_pwd(t_env *env)
 {
-	printf("%s\n" ,find_on_head(env, "PWD")->content);
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+		ft_putendl_fd(pwd, 1);
+	free(pwd);
 	return(1);
 }

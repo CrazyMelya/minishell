@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 06:33:36 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/06 14:40:27 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,5 +214,6 @@ int	main(int argc, char **argv, char **envp)
 	argc = 0;
 	argv = 0;
 	env = envp_to_list(envp);
+	signal(SIGINT, myint);
 	return (body(env));
 }

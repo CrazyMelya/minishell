@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 06:36:52 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/06 14:40:39 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,7 @@ void	close_fd(int **fds);
 int		**fds_and_pipes_init(int size);
 
 int	minisize(t_mini	*mini);
+
+void myint();
 
 #endif
