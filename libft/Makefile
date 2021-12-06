@@ -56,6 +56,9 @@ OBJS		= $(SRCS:%.c=%.o)
 
 BONUS_OBJS	= $(BONUS_SRCS:%.c=%.o)
 
+%.o:%.c
+	@gcc $(CFLAGS) $(INCLUDE) -c $< -o $@
+
 $(NAME): $(OBJS) $(HEAD)
 	@ar rcs $(NAME)  $?
 

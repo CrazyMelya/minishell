@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 01:39:50 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/05 06:36:52 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,23 @@ void	free_mini(t_mini *mini);
 void	free_argv(t_argv *argv);
 void	free_redir(t_redir *redir);
 void	free_fd_pid(int **fd, pid_t *pid);
+void	print_error(char *error, char *str);
+
+int		redir_write(t_mini *mini, int **fds, int n, int size);
+void	here_doc(t_mini *mini);
+int		read_file(t_mini *mini);
+int		redir_read(t_mini *mini, int **fds, int n, int size);
+
+char	*search_path(t_env *env, char *cmd);
+char	**argv_to_arr(t_argv *argv, int argc);
+
+char	**envp_arr(t_env *envr);
+t_env	*envp_to_list(char **envp);
+
+int		check_cmd(t_mini *mini);
+void	close_fd(int **fds);
+int		**fds_and_pipes_init(int size);
+
+int	minisize(t_mini	*mini);
+
 #endif

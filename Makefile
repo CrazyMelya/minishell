@@ -2,11 +2,9 @@ NAME	=	minishell
 
 HEAD	=	minishell.h
 
-#CFLAGS	=	-Wall -Wextra -Werror
-USER	=	vbackyet
-CC		=	gcc
+# CFLAGS	=	-Wall -Wextra -Werror
 
-# SRCS	=	commands.c
+CC		=	gcc
 
 SRCS	=  	minishell.c \
 			free.c\
@@ -22,13 +20,25 @@ SRCS	=  	minishell.c \
 			commands/ft_export.c\
 			commands/ft_pwd.c\
 			commands/ft_env.c\
-			commands/ft_unset.c
+			commands/ft_unset.c\
+			execute/env.c\
+			execute/mini.c\
+			execute/redirection.c\
+			execute/utils.c\
+			execute/utils_two.c\
 			
 OBJS 	= $(SRCS:%.c=%.o)
 
+LIB 	= libft/libft.a
+
+READLINE	= -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
+
+%.o: %.c 
+	@gcc $(CFLAGS) $(INCLUDE) -c $< -o $@
+
 $(NAME): $(OBJS) $(HEAD)
 	@make -C ./libft bonus
-	@$(CC) ./libft/libft.a -lreadline  -I ~/.brew/opt/readline/include -L ~/.brew/opt/readline/lib/ $(OBJS) -o $(NAME)
+	@$(CC) $(LIB) $(READLINE) $(OBJS) -o $(NAME)
 
 all: $(NAME)
 
@@ -43,6 +53,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all, clean, fclean, re
-
-
-# $(CC) ./libft/libft.a -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib/  -lreadline $(OBJS) -o $(NAME)

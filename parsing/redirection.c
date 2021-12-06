@@ -6,26 +6,25 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/04 15:36:41 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/05 03:25:29 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_file(t_mini *mini, char *filename)
+int	check_file(char *filename, int type)
 {
 	int	fd;
 
 	if (check_dir(filename))
 		return (-1);
-	if (mini->write_type)
-		fd = open(mini->write_file, O_WRONLY | O_CREAT | O_APPEND, 0666);
+	if (type)
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else
-		fd = open(mini->write_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
 	{
-		printf("😎 \033[0;36m\033[1mminishell ▸ \033[0m%s: "
-			"Permission denied\n", mini->write_file);
+		print_error(": Permission denied", filename);
 		free(filename);
 		return (-1);
 	}
@@ -35,19 +34,12 @@ int	check_file(t_mini *mini, char *filename)
 
 int	new_write_redir(t_mini *mini, char *filename, int type)
 {
+	if (check_file(filename, type))
+		return (-1);
 	if (mini->write_file)
-	{
-		if (check_file(mini, filename))
-			return (-1);
 		free(mini->write_file);
-		mini->write_file = filename;
-		mini->write_type = type;
-	}
-	else
-	{
-		mini->write_file = filename;
-		mini->write_type = type;
-	}
+	mini->write_file = filename;
+	mini->write_type = type;
 	return (0);
 }
 
