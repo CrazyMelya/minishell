@@ -16,7 +16,13 @@ void	ft_unset(t_env **envr, char *unset)
 	t_env	*after;
 	t_env	*pre;
 
-	after = (find_on_head(*envr, unset))->next;
+	after = find_on_head(*envr, unset);
 	pre = finde_pre_on_head(*envr, unset);
-	pre->next = after;
+	if (!(after) || !(pre))
+		return ;
+	free(pre->next->key);
+	free(pre->next->content);
+	free(pre->next->next);
+	free(pre->next);	
+	pre->next = after->next;
 }

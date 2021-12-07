@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/07 16:21:53 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/12/07 17:31:57 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,9 @@ int	body(t_env *env)
 		free(line);
 		if (mini->ret != -1)
 			return (mini->ret);
-		// free_env(mini->env);
 		free_mini(mini);
 	}
+	// free_env(mini->env);
 }
 
 int	main(int argc, char **argv, char **envp)

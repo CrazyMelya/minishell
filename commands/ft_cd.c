@@ -41,7 +41,7 @@ int do_pwd(char *path, t_env *env)
 int do_oldpwd(t_env *env)
 {
 	t_env *my_str = find_on_head(env, "OLDPWD");
-
+	free(my_str->content);
 	my_str->content = find_on_head(env, "PWD")->content;
 	//Заменяем старый путь
 // ret = chdir(env_path);
