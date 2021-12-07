@@ -6,8 +6,6 @@
 // ◦ ctrl-D exit the shell.
 // ◦ ctrl-\ do nothing.
 
-// #include <readline/readline.h>
-// #include <readline/history.h>
 
 // надо установить homebrew
 // https://github.com/daniiomir/faq_for_school_21#brew
@@ -18,6 +16,7 @@
 
 #include "minishell.h"
 #define STDERR 2
+
 
 
 // void	ft_putstr_fd(char *s, int fd)

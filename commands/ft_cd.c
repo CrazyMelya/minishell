@@ -70,7 +70,16 @@ int ft_cd(char *path, t_env *env)
 	{
 		
 	}
+	if (r == -1)
+	{
+		printf("minishell: cd: %s: No such file or directory\n", path);
+	}
 	do_oldpwd(env);
 	do_pwd(full_path, env);
+	free(full_path);
 	return(SUCCESS);
 }
+///^D ^C
+// ◦ ctrl-C print a new prompt on a newline.
+// ◦ ctrl-D exit the shell.
+// ◦ ctrl-\ do nothing.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 14:40:39 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/07 15:54:21 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef	struct s_mini
 	struct s_mini	*next;
 }				t_mini;
 
+void  rl_replace_line(const char *buffer, int val);
 int 	ft_echo(int argc, char **argv);
 int		check_line(char *line);
 int		write_redir(t_mini *mini, char **line);
@@ -129,5 +130,9 @@ int		**fds_and_pipes_init(int size);
 int	minisize(t_mini	*mini);
 
 void myint();
+void myint2();
+void myint3();
 
+void  rl_replace_line(const char *buffer, int val);
+extern int rl_catch_signals;
 #endif

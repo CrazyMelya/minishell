@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 16:22:32 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/07 16:21:53 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,14 +182,32 @@ void	run(t_mini *mini)
 	}
 }
 
+
+void free_env(t_env *env)
+{
+	while (env != NULL)
+	{
+		free(env->key);
+		free(env->content);
+		env = env->next;
+	}
+		
+}
+
+
 int	body(t_env *env)
 {
 	t_mini	*mini;
 	char	*line;
 
+	signal(2, myint);
+	signal(3, myint2);
+	rl_catch_signals = 0;
 	while (1)
 	{
 		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
+		if (line == '\0')
+			myint3();
 		if (line[0] != '\0')
 		{
 			add_history(line);
@@ -207,6 +225,7 @@ int	body(t_env *env)
 		free(line);
 		if (mini->ret != -1)
 			return (mini->ret);
+		// free_env(mini->env);
 		free_mini(mini);
 	}
 }
