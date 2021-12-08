@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/07 17:31:57 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/12/08 19:28:22 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,26 @@ void	print_mini(t_mini *mini)
 
 int	our_commands(t_mini *mini)
 {
+	char **argv = argv_to_arr(mini->argv, mini->argc);
 	if (!ft_strncmp(mini->argv->arg, "echo", 5))
-		ft_echo(mini->argc, argv_to_arr(mini->argv, mini->argc));
+		ft_echo(mini->argc, argv);
 	else if (!ft_strncmp(mini->argv->arg, "cd", 3))
-		ft_cd(argv_to_arr(mini->argv, mini->argc)[1], mini->env);
+		ft_cd(argv[1], mini->env);
 	else if (!ft_strncmp(mini->argv->arg, "pwd", 4))
 		ft_pwd(mini->env);
 	else if (!ft_strncmp(mini->argv->arg, "env", 4))
 		ft_env(mini->env);
 	else if (!ft_strncmp(mini->argv->arg, "export", 7))
-		ft_export(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
+		ft_export(&mini->env, argv[1]);
 	else if (!ft_strncmp(mini->argv->arg, "unset", 6))
-		ft_unset(&mini->env, argv_to_arr(mini->argv, mini->argc)[1]);
+		ft_unset(&mini->env, argv[1]);
 	else if (!ft_strncmp(mini->argv->arg, "env", 4))
 		ft_env(mini->env);
 	else if (!ft_strncmp(mini->argv->arg, "exit", 5))
-		ft_exit(mini, argv_to_arr(mini->argv, mini->argc));
-	else
-		return (1);
+		ft_exit(mini, argv);
+	else{free(argv);
+		return (1);}
+		free(argv);
 	return (0);
 }
 
@@ -210,6 +212,7 @@ int	body(t_env *env)
 			myint3();
 		if (line[0] != '\0')
 		{
+			signal(2, SIG_IGN);
 			add_history(line);
 			mini = new_mini(env, 0);
 			if (check_line(line))
@@ -221,11 +224,11 @@ int	body(t_env *env)
 				continue ;
 			}
 			run(mini);
+			if (mini->ret != -1)
+				return (mini->ret);
+			free_mini(mini);
 		}
 		free(line);
-		if (mini->ret != -1)
-			return (mini->ret);
-		free_mini(mini);
 	}
 	// free_env(mini->env);
 }

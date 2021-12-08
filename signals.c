@@ -44,11 +44,14 @@
 // "/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)""
 
 
+
+
+
 void	restore_prompt(int sig)
 {
 	// g_ret_number = 130;
 	write(1, "\n", 1); // перенос на новую строку
-	rl_replace_line("", 234567890);
+	rl_replace_line("", 1);
 	rl_on_new_line(); //сообщить процедурам обновления, что мы перешли на новую строку
 	rl_redisplay(); //пишет строку bash
 	(void)sig;
@@ -67,6 +70,7 @@ void	restore_prompt(int sig)
 // 	printf("Quit (core dumped)\n");
 // 	(void)sig;
 // }
+extern int rl_done;
 void myint()
 {
 	// ft_putstr_fd("нажал ctrl-c   - новая строка\n", 2);
@@ -75,7 +79,8 @@ void myint()
 		// ft_putstr_fd("\n", STDERR);
 		// ft_putstr_fd("bash", STDERR);
 		
-		restore_prompt(5);
+		restore_prompt(0);
+		rl_done = 0;
 		// rl_on_new_line();
 		// rl_redisplay();
 		//  rl_replace_line();
@@ -90,7 +95,7 @@ void myint2()
 {
 	// printf("нажал backslash   - ничего не делает\n");
 	// rl_replace_line("", "^");
-	rl_replace_line("", 33);
+	// rl_replace_line("", 33);
 	rl_redisplay();
 	// rl_on_new_line();
 	// rl_redisplay();
@@ -100,7 +105,7 @@ void myint2()
 
 void myint3()
 {
-	printf("нажал ctrl-d ffff  - закрыть программу\n");
+	printf("exit\n");
 	exit(1);
 }
 

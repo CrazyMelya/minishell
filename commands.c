@@ -44,15 +44,30 @@ void	show_env(t_env *envr)
 
 void	paste_env(t_env *export, t_env **envr)
 {
-	t_env	*first_el;
+	t_env	*temp;
+	int		i;
 
-	first_el = *envr;
-	while ((*envr)->next != NULL)
+	temp = *envr;
+	// printf("11\n");
+	while (temp-> next != NULL)
 	{
-		*envr = (*envr)->next;
+		// printf("here we go %s, %s\n", temp->key, export->key);
+		if (ft_strcmp(temp->key, export->key) == 0)
+		{ free(export->key); free(export->content);free(export);
+			return ;}
+			// printf("%p\n", temp);
+		temp = temp->next;
 	}	
-	(*envr)->next = export;
-	*envr = first_el;
+	if (ft_strcmp(temp->key, export->key) == 0)
+	{
+		free(export->key); free(export->content);free(export);
+			return ;
+	}
+	// printf("13\n");
+	// printf("here we go2\n");
+	temp->next = export;
+	// export->next = NULL;
+	
 }
 
 static	int	detect_len_of_stack(t_env *stack)
@@ -113,9 +128,8 @@ char *find_the_min(t_env *envr, int from, int i)
 	beg = envr;
 	while (envr != NULL)
 	{
-		if (envr->flag == 1)
-			envr = envr->next;
-		else
+		if (envr->flag != 1)
+
 		{
 			if ((sum_of_lett(envr->key, i, envr->flag) <= from) && \
 				(sum_of_lett(envr->key, i, envr->flag) != 0))
@@ -129,14 +143,22 @@ char *find_the_min(t_env *envr, int from, int i)
 			}
 			else
 				envr->flag = -1;
-			envr = envr->next;
+			if ((the_word_of_min == NULL) && (envr->next == NULL))
+				the_word_of_min = envr->key;
+			// printf("here bab %d %s %d\n", envr->flag, envr->key, sum_of_lett(envr->key, i, envr->flag));			
 		}
-		if ((the_word_of_min == NULL) && (envr->next == NULL))
-			the_word_of_min = envr->key;
+		envr = envr->next;
+
 	}
+
+	// printf("!! the word of min (%d) %s!!\n", flag, the_word_of_min);
+	// if (ft_strcmp("a", the_word_of_min) == 0)
+	// sleep(1);
 	clean_the_stuff(beg, from, i);
+	// printf("bebeb\n");
+	envr = beg;
 	if (flag)
-		return (NULL);
+		return (NULL);//возвращает нул если данный лист не минимальный!
 	return (the_word_of_min);
 }
 
@@ -163,6 +185,17 @@ void half_back_flags(t_env *env)
 			env->flag = 0;
 }
 
+void check_the_stck(t_env *envr)
+{
+	while(envr != NULL)
+	{
+		// printf("%s",envr->key );
+		if (envr->key == NULL)
+			sleep(50);
+		envr = envr->next;
+	}
+}
+
 void show_sorted_env(t_env *envr)
 {
 	char	*the_min_word;
@@ -173,14 +206,18 @@ void show_sorted_env(t_env *envr)
 
 	len_of_the_stack = detect_len_of_stack(envr);
 	from = 100000;
+	check_the_stck(envr);
 	while (len_of_the_stack)
 	{
 		i = 0;
 		while ((the_min_word = find_the_min(envr, from, i)) == NULL)
+		{
 			i++;
+			}
 		half_back_flags(envr);
 		the_el = find_on_head(envr, the_min_word);
 		(*the_el).flag = 1;
+
 		if (the_el->content)
 			printf("declare -x %s=\"%s\"\n", the_el->key, the_el->content);
 		else

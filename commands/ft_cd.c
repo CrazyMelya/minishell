@@ -2,8 +2,9 @@
 
 t_env *find_on_head(t_env *env, char *head)
 {
+	// printf("here3\n");
 
-	while (env->next != NULL)
+	while (env != NULL)
 	{
 		if (ft_strcmp(env->key, head) == 0)
 			return(env);
@@ -11,11 +12,7 @@ t_env *find_on_head(t_env *env, char *head)
 		env = env->next;
 		// printf("- %s\n", env->key);
 	}
-	if (ft_strcmp(env->key, head) == 0)
-		return(env);
 		// printf("+ %s\n", env->key);
-	env = env->next;
-	printf("NO WAY %s\n", head);
 	return(NULL);
 }
 

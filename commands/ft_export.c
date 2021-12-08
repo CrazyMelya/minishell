@@ -27,12 +27,12 @@ int	ft_export(t_env **envr, char *flag)
 	}
 	else
 	{		
-		first_el = *envr;
+// printf("1\n");
 		export2 = turn_char_to_leaf(flag);
+// printf("2\n");
 		paste_env(export2, envr);
-		*envr = first_el;
 		show_sorted_env(*envr);
-		free(export2);
+// printf("5\n");
 		return (0);
 	}
 }
