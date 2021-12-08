@@ -6,7 +6,7 @@
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/08 19:28:22 by vbackyet         ###   ########.fr       */
+/*   Updated: 2021/12/08 19:34:31 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,6 @@ int	body(t_env *env)
 			if (ft_parse(line, mini))
 			{
 				free_mini(mini);
-				g_status = 1;
 				continue ;
 			}
 			run(mini);
@@ -230,7 +229,6 @@ int	body(t_env *env)
 		}
 		free(line);
 	}
-	// free_env(mini->env);
 }
 
 int	main(int argc, char **argv, char **envp)

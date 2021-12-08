@@ -1,72 +1,55 @@
 #include "../minishell.h"
 
-t_env *find_on_head(t_env *env, char *head)
+t_env	*find_on_head(t_env *env, char *head)
 {
-	// printf("here3\n");
-
 	while (env != NULL)
 	{
 		if (ft_strcmp(env->key, head) == 0)
-			return(env);
-		// printf("+ %s\n", env->key);
+			return (env);
 		env = env->next;
-		// printf("- %s\n", env->key);
 	}
-		// printf("+ %s\n", env->key);
-	return(NULL);
+	return (NULL);
 }
 
-
-
-char *ft_pwd_in()
+char	*ft_pwd_in(void)
 {
-	char *dir;
+	char	*dir;
+
 	dir = malloc(1024);
 	getcwd(dir, 1024);
-	return dir;
-	//или просто распечатать?
+	return (dir);
 }
 
-int do_pwd(char *path, t_env *env)
+int	do_pwd(char *path, t_env *env)
 {
-	//Заменяем текущий путь
-	t_env *my_str = find_on_head(env, "PWD");
+	t_env	*my_str;
+
+	my_str = find_on_head(env, "PWD");
 	my_str->content = path;
-	return(0);
+	return (0);
 }
 
-int do_oldpwd(t_env *env)
+int	do_oldpwd(t_env *env)
 {
-	t_env *my_str = find_on_head(env, "OLDPWD");
+	t_env	*my_str;
+
+	my_str = find_on_head(env, "OLDPWD");
 	free(my_str->content);
 	my_str->content = find_on_head(env, "PWD")->content;
-	//Заменяем старый путь
-// ret = chdir(env_path);
-	return(0);
+	return (0);
 }
 
-
-
-
-
-int ft_cd(char *path, t_env *env)
+int	ft_cd(char *path, t_env *env)
 {
-	// функция меняет путь pwd и oldpwd
-	//для того, чтобы функция меняла нужен лист формата - неважно какого формата есть структура head и content
-	//проверка на существование этого пути
-	// замена предыдущего на настоящий
-	// замена настоящего на предстоящий
+	int		r;
+	char	*full_path;
 
-	// 1) просто путь
-
-
-
-	int r = chdir(path);
-	char *full_path = ft_pwd_in();
 	if (path == NULL)
 	{
-		
+		path = find_on_head(env, "HOME")->content;
 	}
+	r = chdir(path);
+	full_path = ft_pwd_in();
 	if (r == -1)
 	{
 		printf("minishell: cd: %s: No such file or directory\n", path);

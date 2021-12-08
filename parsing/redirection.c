@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:32:30 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 03:25:29 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/08 19:32:32 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ int	check_file(char *filename, int type)
 int	new_write_redir(t_mini *mini, char *filename, int type)
 {
 	if (check_file(filename, type))
+	{
+		g_status = 1;
 		return (-1);
+	}
 	if (mini->write_file)
 		free(mini->write_file);
 	mini->write_file = filename;
