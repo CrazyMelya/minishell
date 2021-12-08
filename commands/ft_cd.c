@@ -39,25 +39,40 @@ int	do_oldpwd(t_env *env)
 	return (0);
 }
 
+
+void	print_error2(char *error, char *str)
+{
+	ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
+	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putendl_fd(error, 2);
+}
+
+
 int	ft_cd(char *path, t_env *env)
 {
 	int		r;
 	char	*full_path;
+	t_env	*head_of_home;
 
 	if (path == NULL)
 	{
-		path = find_on_head(env, "HOME")->content;
+		head_of_home = find_on_head(env, "HOME");
+		if (head_of_home == NULL)
+		{
+			print_error(" : HOME not set", "cd");
+			return (SUCCESS);
+		}
+		path = head_of_home->content;
 	}
 	r = chdir(path);
 	full_path = ft_pwd_in();
 	if (r == -1)
-	{
-		printf("minishell: cd: %s: No such file or directory\n", path);
-	}
+		print_error2(": No such file or directory", path);
 	do_oldpwd(env);
 	do_pwd(full_path, env);
 	free(full_path);
-	return(SUCCESS);
+	return (SUCCESS);
 }
 ///^D ^C
 // ◦ ctrl-C print a new prompt on a newline.
