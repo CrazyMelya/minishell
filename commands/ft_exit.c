@@ -1,20 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 17:52:09 by vbackyet          #+#    #+#             */
+/*   Updated: 2021/12/09 18:09:15 by vbackyet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int ft_strisnum(char *word)
+int	ft_strisnum(char *word)
 {
-	while(*word)
+	if (ft_atoi(word) == -1)
+		return (0);
+	if (*word == '+')
+		word++;
+	while (*word)
 	{
-		if (ft_isalpha(*word))
-			return(0);
+		if (!ft_isdigit(*word))
+			return (0);
 		word++;
 	}
-	return(1);
+	return (1);
 }
-
 
 void	ft_exit(t_mini *mini, char **array)
 {
-	// ft_putstr_fd("exit\n", 2);
 	if (array[1] && array[2])
 	{
 		g_status = 1;

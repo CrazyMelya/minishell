@@ -14,6 +14,7 @@ SRCS	=  	minishell.c \
 			parsing/parse_utils.c\
 			signals.c \
 			commands.c \
+			error.c\
 			commands/ft_cd.c\
 			commands/ft_echo.c\
 			commands/ft_exit.c\

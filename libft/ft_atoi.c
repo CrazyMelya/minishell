@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 14:14:34 by cliza             #+#    #+#             */
-/*   Updated: 2021/04/26 14:05:13 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 18:03:24 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_atoi(const char *str)
 		if (n > INT64_MAX && s == 1)
 			return (-1);
 		if (n >= INT64_MAX && s == -1)
-			return (0);
+			return (-1);
 		str++;
 	}
 	return (n * s);

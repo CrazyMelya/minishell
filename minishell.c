@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/09 16:37:44 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 19:10:45 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,8 +214,7 @@ void free_env(t_env *env)
 		free(env->key);
 		free(env->content);
 		env = env->next;
-	}
-		
+	}	
 }
 
 

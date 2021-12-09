@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 17:52:21 by vbackyet          #+#    #+#             */
+/*   Updated: 2021/12/09 19:34:43 by vbackyet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_env	*turn_char_to_leaf(char *my_arg)
@@ -27,12 +39,8 @@ int	ft_export(t_env **envr, char *flag)
 	}
 	else
 	{		
-// printf("1\n");
 		export2 = turn_char_to_leaf(flag);
-// printf("2\n");
 		paste_env(export2, envr);
-		show_sorted_env(*envr);
-// printf("5\n");
 		return (0);
 	}
 }
