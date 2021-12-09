@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 17:51:53 by vbackyet          #+#    #+#             */
+/*   Updated: 2021/12/09 18:25:01 by vbackyet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_env	*find_on_head(t_env *env, char *head)
@@ -39,16 +51,6 @@ int	do_oldpwd(t_env *env)
 	return (0);
 }
 
-
-void	print_error2(char *error, char *str)
-{
-	ft_putstr_fd("😎 \033[0;36m\033[1mminishell ▸ \033[0m", 2);
-	ft_putstr_fd("cd: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putendl_fd(error, 2);
-}
-
-
 int	ft_cd(char *path, t_env *env)
 {
 	int		r;
@@ -74,7 +76,3 @@ int	ft_cd(char *path, t_env *env)
 	free(full_path);
 	return (SUCCESS);
 }
-///^D ^C
-// ◦ ctrl-C print a new prompt on a newline.
-// ◦ ctrl-D exit the shell.
-// ◦ ctrl-\ do nothing.

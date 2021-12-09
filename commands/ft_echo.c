@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 17:51:59 by vbackyet          #+#    #+#             */
+/*   Updated: 2021/12/09 17:51:59 by vbackyet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int ft_echo(int argc, char **argv)
+int	ft_echo(int argc, char **argv)
 {
 	int	i;
 	int	flag;
@@ -24,5 +36,5 @@ int ft_echo(int argc, char **argv)
 	}
 	if (!flag)
 		ft_putchar_fd('\n', 1);
-	return(SUCCESS);
+	return (SUCCESS);
 }

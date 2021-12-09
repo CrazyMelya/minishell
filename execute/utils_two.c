@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 06:31:37 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 06:33:45 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 21:14:19 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,24 @@ void	close_fd(int **fds)
 
 int	check_cmd(t_mini *mini)
 {
-	if (!ft_strncmp(mini->argv->arg, "echo", 5))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "cd", 3))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "pwd", 4))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "env", 4))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "export", 7))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "unset", 6))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "env", 4))
-		return (1);
-	else if (!ft_strncmp(mini->argv->arg, "exit", 5))
-		return (1);
+	if (mini->argv)
+	{
+		if (!ft_strcmp(mini->argv->arg, "echo"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "cd"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "pwd"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "env"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "export"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "unset"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "env"))
+			return (1);
+		else if (!ft_strcmp(mini->argv->arg, "exit"))
+			return (1);
+	}
 	return (0);
 }

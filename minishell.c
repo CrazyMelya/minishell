@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/09 19:24:26 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 21:36:01 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,41 @@ void	print_mini(t_mini *mini)
 	t_redir	*temp;
 	t_argv	*temp2;
 
-	i = 0;
-	if (mini->argv)
+	while (mini)
 	{
-		printf("%i ", mini->argc);
-		temp2 = mini->argv;
-		while (temp2)
+		i = 0;
+		if (mini->argv)
 		{
-			printf("%i %s ", i, temp2->arg);
-			temp2 = temp2->next;
-			i++;
+			printf("%i ", mini->argc);
+			temp2 = mini->argv;
+			while (temp2)
+			{
+				printf("%i %s ", i, temp2->arg);
+				temp2 = temp2->next;
+				i++;
+			}
 		}
+		if (mini->write_file)
+		{
+			printf("| %s ", mini->write_file);
+			if (mini->write_type == 1)
+				printf(" >> |");
+			else if (!mini->write_type)
+				printf(" > |");
+		}
+		temp = mini->read_redir;
+		while (temp)
+		{
+			printf("| %s ", temp->filename);
+			if (temp->type == 1)
+				printf(" << |");
+			else
+				printf(" < |");
+				temp = temp->next;
+		}
+		mini = mini->next;
+		printf("\n");
 	}
-	if (mini->write_file)
-	{
-		printf("| %s ", mini->write_file);
-		if (mini->write_type == 1)
-			printf(" >> |");
-		else if (!mini->write_type)
-			printf(" > |");
-	}
-	temp = mini->read_redir;
-	while (temp)
-	{
-		printf("| %s ", temp->filename);
-		if (temp->type == 1)
-			printf(" << |");
-		else
-			printf(" < |");
-			temp = temp->next;
-	}
-	printf("\n");
 }
 
 int	our_commands(t_mini *mini)
@@ -70,7 +74,7 @@ int	our_commands(t_mini *mini)
 	else if (!ft_strcmp(mini->argv->arg, "env"))
 		g_status = ft_env(mini->env);
 	else if (!ft_strcmp(mini->argv->arg, "exit"))
-		ft_exit(mini, argv);
+		g_status = ft_exit(mini, argv);
 	else
 	{
 		free(argv);
@@ -111,12 +115,15 @@ int	ft_pipe(t_mini *mini, int **fds, int n, int size)
 		else
 			return (1);
 	}
-	if (n != -1)
-		close_fd(fds);
-	if (our_commands(mini))
-		other_cmd(mini);
-	else if (n != -1)
-		exit(0);
+	if (mini->argv)
+	{
+		if (n != -1)
+			close_fd(fds);
+		if (our_commands(mini))
+			other_cmd(mini);
+		else if (n != -1)
+			exit(0);
+	}
 	return (0);
 }
 
@@ -135,7 +142,7 @@ int	run_pipe(t_mini *mini, pid_t *pid, int **fd, int size)
 			if (pid[i] == -1)
 			{
 				print_error(" : Resource temporarily unavailable", "fork");
-				return (1);
+				return (128);
 			}
 			if (!pid[i])
 				ft_pipe(mini, fd, mini->id, size);
@@ -181,6 +188,7 @@ void	mywait(pid_t *pid, int size)
 	{
 		while (i < size)
 			waitpid(pid[i++], NULL, 0);
+		g_status = 1;
 	}
 }
 
@@ -191,19 +199,16 @@ void	run(t_mini *mini)
 	int		size;
 
 	size = minisize(mini);
-	if (mini->argv)
+	if (check_cmd(mini))
+		ours_is_first(mini, &size, &fd, &pid);
+	else
 	{
-		if (check_cmd(mini))
-			ours_is_first(mini, &size, &fd, &pid);
-		else
-		{
-			pid = malloc(sizeof(pid_t) * size);
-			fd = fds_and_pipes_init(size);
-			g_status = run_pipe(mini, pid, fd, size);
-		}
-		mywait(pid, size);
-		free_fd_pid(fd, pid);
+		pid = malloc(sizeof(pid_t) * size);
+		fd = fds_and_pipes_init(size);
+		g_status = run_pipe(mini, pid, fd, size);
 	}
+	mywait(pid, size);
+	free_fd_pid(fd, pid);
 }
 
 
@@ -214,50 +219,51 @@ void free_env(t_env *env)
 		free(env->key);
 		free(env->content);
 		env = env->next;
-	}
-		
+	}	
 }
 
-int	body(t_env *env)
+int	body(t_env *env, char *line)
 {
 	t_mini	*mini;
-	char	*line;
 
-	while (1)
+	signals_in_cmd();
+	add_history(line);
+	mini = new_mini(env, 0);
+	if (check_line(line))
+		return (-1);
+	if (ft_parse(line, mini))
 	{
-		signal(2, myint);
-		signal(3, myint2);
-		rl_catch_signals = 0;
-		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
-		if (line == '\0')
-			myint3();
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			mini = new_mini(env, 0);
-			if (check_line(line))
-				continue ;
-			if (ft_parse(line, mini))
-			{
-				free_mini(mini);
-				continue ;
-			}
-			run(mini);
-			if (mini->ret != -1)
-				return (mini->ret);
-			free_mini(mini);
-		}
-		free(line);
+		free_mini(mini);
+		return (-1);
 	}
+	run(mini);
+	if (mini->ret != -1)
+		return (mini->ret);
+	free_mini(mini);
+	return (-1);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
+	char	*line;
+	int		value;
 
 	argc = 0;
 	argv = 0;
 	g_status = 0;
+	value = -1;
 	env = envp_to_list(envp);
-	return (body(env));
+	while (1)
+	{
+		signals_in_main();
+		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
+		if (!line)
+			myint3();
+		if (line[0] != '\0')
+			value = body(env, line);
+		if (value != -1)
+			return (value);
+		free(line);
+	}
 }
