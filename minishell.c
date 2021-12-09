@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 16:22:32 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/08 19:33:38 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,15 +199,14 @@ int	body(t_env *env)
 			if (ft_parse(line, mini))
 			{
 				free_mini(mini);
-				g_status = 1;
 				continue ;
 			}
 			run(mini);
+			if (mini->ret != -1)
+				return (mini->ret);
+			free_mini(mini);
 		}
 		free(line);
-		if (mini->ret != -1)
-			return (mini->ret);
-		free_mini(mini);
 	}
 }
 
