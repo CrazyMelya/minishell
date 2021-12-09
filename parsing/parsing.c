@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 16:20:44 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 16:04:58 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ void	parse_dollar(t_mini *mini, char **line, char **arg)
 
 	key = NULL;
 	(*line)++;
+	if (ft_isdigit(**line))
+	{
+		(*line)++;
+		return ;
+	}
 	if (**line == '\'' || **line == '\"')
 	{
 		quotes(mini, line, arg);
@@ -56,7 +61,7 @@ void	double_quotes(t_mini *mini, char **line, char **arg)
 	(*line)++;
 	while (**line != '\"' && **line)
 	{
-		if (**line == '$' && (*line)[1] != '\"')
+		if (**line == '$' && (*line)[1] != '\"' && (*line)[1] != '=')
 			parse_dollar(mini, line, arg);
 		else
 		{
@@ -65,6 +70,8 @@ void	double_quotes(t_mini *mini, char **line, char **arg)
 		}	
 	}
 	(*line)++;
+	if (**line == ' ')
+		*arg = ft_chrjoin(*arg, '\0');
 }
 
 int	parse_continue(t_mini **mini, char *arg, char **line)

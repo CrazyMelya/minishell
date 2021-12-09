@@ -24,6 +24,5 @@ int ft_echo(int argc, char **argv)
 	}
 	if (!flag)
 		ft_putchar_fd('\n', 1);
-	free(argv);
 	return(SUCCESS);
 }

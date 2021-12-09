@@ -31,8 +31,8 @@ OBJS 	= $(SRCS:%.c=%.o)
 
 LIB 	= libft/libft.a
 
-READLINE	= -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
-
+READLINE	= -I ~/.brew/Cellar/readline/8.1.1/include -L ~/.brew/Cellar/readline/8.1.1/lib -lreadline
+# -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include -I 
 %.o: %.c 
 	@gcc $(CFLAGS) $(INCLUDE) -c $< -o $@
 

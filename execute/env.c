@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 06:28:49 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/05 06:32:36 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/08 18:17:31 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_env	*new_env(char *key, char *content)
 
 	new = malloc(sizeof(t_env));
 	new->key = key;
-	if (!ft_strncmp(key, "SHLVL", 6))
+	if (!ft_strcmp(key, "SHLVL"))
 	{
 		new->content = ft_itoa(ft_atoi(content) + 1);
 		free(content);

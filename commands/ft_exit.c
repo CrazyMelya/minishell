@@ -14,7 +14,7 @@ int ft_strisnum(char *word)
 
 void	ft_exit(t_mini *mini, char **array)
 {
-	ft_putstr_fd("exit\n", 2);
+	// ft_putstr_fd("exit\n", 2);
 	if (array[1] && array[2])
 	{
 		g_status = 1;

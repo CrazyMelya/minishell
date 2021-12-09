@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:42 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/06 14:40:39 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 15:51:27 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #define SUCCESS 0
-#define SPEC "<>$\'\" |"
+#define SPEC "<>$\'\" |="
 #define SPEC2 "<>| "
 #define SPEC3 "<>\'\" |"
 #define SYNT_ERR "bash: syntax error near unexpected token"
@@ -68,6 +68,7 @@ typedef	struct s_mini
 	struct s_mini	*next;
 }				t_mini;
 
+void  rl_replace_line(const char *buffer, int val);
 int 	ft_echo(int argc, char **argv);
 int		check_line(char *line);
 int		write_redir(t_mini *mini, char **line);
@@ -80,7 +81,7 @@ void	ft_putstr_fd(char *s, int fd);
 t_env *find_on_head(t_env *env, char *head);
 void show_sorted_env(t_env *envr);
 void print_pwd_and_old_pwd(t_env *envr);
-void ft_unset(t_env **envr, char *unset);
+int ft_unset(t_env **envr, char *unset);
 
 int ft_export(t_env **envr, char *flag);
 t_env	*envp_to_list(char **envp);
@@ -129,5 +130,9 @@ int		**fds_and_pipes_init(int size);
 int	minisize(t_mini	*mini);
 
 void myint();
+void myint2();
+void myint3();
 
+void  rl_replace_line(const char *buffer, int val);
+extern int rl_catch_signals;
 #endif

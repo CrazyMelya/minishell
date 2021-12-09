@@ -8,5 +8,5 @@ int ft_pwd(t_env *env)
 	if (pwd)
 		ft_putendl_fd(pwd, 1);
 	free(pwd);
-	return(1);
+	return(0);
 }
