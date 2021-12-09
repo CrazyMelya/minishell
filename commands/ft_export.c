@@ -31,7 +31,7 @@ int	ft_export(t_env **envr, char *flag)
 		export2 = turn_char_to_leaf(flag);
 // printf("2\n");
 		paste_env(export2, envr);
-		show_sorted_env(*envr);
+		// show_sorted_env(*envr);
 // printf("5\n");
 		return (0);
 	}

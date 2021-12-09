@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:07:08 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/09 16:04:58 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 19:22:52 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	single_quotes(char **line, char **arg)
 		(*line)++;
 	}
 	(*line)++;
+	if ((**line == ' ' || !(**line)) && !(*arg))
+		*arg = ft_strjoin(*arg, "");
 }
 
 void	double_quotes(t_mini *mini, char **line, char **arg)
@@ -70,8 +72,8 @@ void	double_quotes(t_mini *mini, char **line, char **arg)
 		}	
 	}
 	(*line)++;
-	if (**line == ' ')
-		*arg = ft_chrjoin(*arg, '\0');
+	if ((**line == ' ' || !(**line)) && !(*arg))
+		*arg = ft_strjoin(*arg, "");
 }
 
 int	parse_continue(t_mini **mini, char *arg, char **line)

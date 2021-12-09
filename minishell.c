@@ -6,7 +6,7 @@
 /*   By: cliza <cliza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:42:45 by cliza             #+#    #+#             */
-/*   Updated: 2021/12/09 16:37:44 by cliza            ###   ########.fr       */
+/*   Updated: 2021/12/09 19:24:26 by cliza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,6 @@ void free_env(t_env *env)
 		
 }
 
-
 int	body(t_env *env)
 {
 	t_mini	*mini;
@@ -229,12 +228,11 @@ int	body(t_env *env)
 		signal(2, myint);
 		signal(3, myint2);
 		rl_catch_signals = 0;
-		line = readline(NULL);
+		line = readline("😎 \033[0;36m\033[1mminishell ▸ \033[0m");
 		if (line == '\0')
 			myint3();
 		if (line[0] != '\0')
 		{
-			signal(2, SIG_IGN);
 			add_history(line);
 			mini = new_mini(env, 0);
 			if (check_line(line))
