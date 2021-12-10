@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   signals2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbackyet <vbackyet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/10 17:33:01 by vbackyet          #+#    #+#             */
-/*   Updated: 2021/12/10 17:33:02 by vbackyet         ###   ########.fr       */
+/*   Created: 2021/12/10 16:57:19 by vbackyet          #+#    #+#             */
+/*   Updated: 2021/12/10 16:57:20 by vbackyet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	restore_prompt(int sig)
 {
-	t_list	*temp;
+	write(1, "\n", 1);
+	rl_replace_line("", 1);
+	rl_on_new_line();
+	rl_redisplay();
+	(void)sig;
+}
 
-	if (*lst)
-	{
-		temp = ft_lstlast(*lst);
-		temp->next = new;
-	}
-	else
-		*lst = new;
+void	myint(void)
+{
+	restore_prompt(0);
+}
+
+void	myint2(void)
+{
+	rl_redisplay();
+}
+
+void	myint3(void)
+{
+	printf("exit\n");
+	exit(1);
 }

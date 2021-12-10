@@ -7,14 +7,18 @@ HEAD	=	minishell.h
 CC		=	gcc
 
 SRCS	=  	minishell.c \
+			minishell2.c \
 			free.c\
 			parsing/check_line.c\
 			parsing/redirection.c\
 			parsing/parsing.c\
 			parsing/parse_utils.c\
 			signals.c \
+			signals2.c \
 			commands.c \
 			error.c\
+			command_utils.c\
+			command_utils2.c\
 			commands/ft_cd.c\
 			commands/ft_echo.c\
 			commands/ft_exit.c\
